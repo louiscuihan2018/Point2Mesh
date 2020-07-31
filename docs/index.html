@@ -1,0 +1,284 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS 184: Final Project</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito">
+    </head>
+<body>
+    <nav class="navbar navbar-splash navbar-expand-md" style="background-color: rgb(45, 61, 138);">
+        <div class="container">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <!-- Left Side Of Navbar -->
+                <ul class="navbar-nav mr-auto">
+                    <li>
+                        <p class="course-title">CS 184: Computer Graphics</p>
+                    </li>
+                </ul>
+                <!-- Right Side Of Navbar -->
+                <ul class="navbar-nav ml-auto">
+                    <!-- Authentication Links -->
+                    <li class="nav-item">
+                        <a id="about" class="item-text" href="javascript:void(0)" "="">Final Project</a>
+                    </li>
+                </ul>
+            </div> 
+        </div>
+    </nav>
+    <div class="course-container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>
+                    <strong>Final Project Proposal</strong>
+                    : Point-cloud to Mesh</h1>
+                <h3>Name: &nbsp; Star Li | SID: 3033789672 &nbsp; Louis Cui | SID: 3033631995</h3>
+            </div>
+        </div>
+        <hr>
+        <div>
+            <h2>Overview</h2>
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <img src="https://doc.cgal.org/latest/Poisson_surface_reconstruction_3/introduction.jpg" alt="">
+                </div>
+            </div>
+            <br>
+            <p>
+                The advancing technologies in camera and computer nowadays go beyond capturing 2D images, making it possible to scan and store our surrounding objects and environments into point-cloud data. These 3D point-clouds, though
+                recognizable in visualization through our eyes, are unorganized and make it hard to apply different operations (regularizations, simplifications etc.) as we have done on meshes. In this project, we want to focus on implementing 
+                the Ball-Pivoting Algorithm which converts a point cloud to triangular meshes effectively. We hope to complete this full pipeline from point cloud inputs to rendering the mesh output using examples from Stanford's 
+                3D Scanning Repository. We tentatively plan to implement another approach -- the Poisson Surface Reconstruction -- as well and compare their performances.
+            </p>
+            <hr>
+            <h2>Project Goals</h2>
+            <h4>Goal 1: Ball-Pivoting Algorithm</h4>
+            <p>
+                Our first goal is to reconstruct triangular meshes from unorganized 3D point clouds based on the Ball-Pivoting Algorithm(BPA) (referring to “The Ball-Pivoting Algorithm for Surface Reconstruction”). 
+                In addition, we would also implement our own methods or utilize external libraries to convert .ply files to point-cloud format with only lists of 3D points. 
+                Also, after we use the BPA to interpolate and form triangle meshes, we will implement another conversion algorithm to store them in a .dae file for future rendering.
+            </p>
+            <strong><p style="color: red;">deliverables:</p></strong>
+            <ul>
+                <li><p>
+                    Rendering examples of meshes produced by the BPA.
+                </p></li>
+                <li><p>
+                    Illustration of key structures of BPA.
+                </p></li>
+            </ul>
+
+            <h4>Goal 2: Integrate with MeshEdit and Experiments</h4>
+            <p>
+                Once the BPA algorithm is implemented, we would integrate it into the pipeline of our project, which takes a .ply file as input, converts it to meshes for rendering or stores in the familiar .dae format. 
+                Also, we would like to set up benchmarks to evaluate the performance of the algorithm, in terms of both speed and geometric accuracy using the original mesh if there’s one.
+            </p>
+            <strong><p style="color: red;">deliverables:</p></strong>
+            <ul>
+                <li><p>
+                    Illustration of project pipeline.
+                </p></li>
+                <li><p>
+                    Benchmark of the algorithm performance.
+                </p></li>
+                <li><p>
+                    Geometric comparison of point-cloud generated meshes with original meshes.
+                </p></li>
+            </ul>
+
+            <h4>Goal 3: Advanced Surface Reconstruction (tentative)</h4>
+            <p>
+                (This part is considered "tentative" for us due to the intense schedule in the summer course. We will prioritize working in the first two tasks and begin this one once the above are finished)
+            </p>
+            <p>
+                In addition to the BPA, we also want to implement another surface reconstruction technique introduced in paper "Poisson Surface Reconstruction" (PSR) if time permits. This method treats the reconstruction from 
+                3D oriented points as a spatial Poisson problem and comes up with a solution that is noise-resistance. Once this part is done, we will be able to enrich our performance evaluation mentioned above by comparing 
+                the results generated by different methods (and running time as well). 
+            </p>
+            <strong><p style="color: red;">deliverables:</p></strong>
+            <ul>
+                <li><p>
+                    Rendering examples of meshes produced by the PSR.
+                </p></li>
+                <li><p>
+                    Illustration of the PSR algorithm.
+                </p></li>
+                <li><p>
+                    Benchmark comparing the performance of PSR v.s. BPA.
+                </p></li>
+            </ul>
+            <hr>
+
+            <h2>Schedule</h2>
+            <ul>
+                <li>
+                   <h4>Week 1 (8.1 - 8.7):</h4> 
+                   <ul>
+                       <li>
+                           <p>Set up the project folder with capability to work with point cloud files.</p>
+                       </li>
+                       <li><p>
+                            Implement a functional BPA algorithm.
+                       </p></li>
+                       <li><p>
+                            Finish Milestone Report with deliverables.
+                       </p></li>
+                   </ul>
+                </li>
+
+                <li>
+                    <h4>Week 2 (8.8 - 8.14):</h4> 
+                    <ul>
+                        <li>
+                            <p>Integrate the BPA algorithm into a complete pipeline that converts point-cloud input to mesh outputs.
+                            </p>
+                        </li>
+                        <li><p>
+                            Evaluate the algorithm’s performance by comparing with the original meshes.
+                        </p></li>
+                        <li><p>
+                            Try to implement the Poisson model (if we have time).
+                        </p></li>
+                        <li><p>
+                            Present final report and presentation.
+                        </p></li>
+                    </ul>
+                 </li>
+            </ul>
+            <hr>
+            <h2>Resources</h2>
+            <h4>Ball-Pivoting Algorithm</h4>
+            <ul>
+                <li><p>
+                    The Ball-Pivoting Algorithm for Surface Reconstruction <a href="https://vgc.poly.edu/~csilva/papers/tvcg99.pdf">https://vgc.poly.edu/~csilva/papers/tvcg99.pdf</a>
+                </p></li>
+            </ul>
+
+            <h4>Poisson Reconstruction</h4>
+            <ul>
+                <li><p>
+                    Poisson Surface Reconstruction <a href="http://hhoppe.com/poissonrecon.pdf">http://hhoppe.com/poissonrecon.pdf</a>
+                </p></li>
+            </ul>
+
+            <h4>Others</h4>
+            <ul>
+                <li><p>
+                    The Stanford 3D Scanning Repository <a href="http://graphics.stanford.edu/data/3Dscanrep/">http://graphics.stanford.edu/data/3Dscanrep/</a>
+                </p></li>
+                <li><p>
+                    File conversion <a href="http://w3.impa.br/~diego/software/rply/">http://w3.impa.br/~diego/software/rply/</a>
+                </p></li>
+                <li><p>
+                    Collada <a href="https://docs.blender.org/manual/en/latest/files/import_export/collada.html">https://docs.blender.org/manual/en/latest/files/import_export/collada.html</a>
+                </p></li>
+            </ul>
+            <br>
+            <hr>
+            <p class="text-center text-md-left">Made with ❤ with Bootstrap,
+                by Star Li (listar2000@berkeley.edu)
+            </p>
+        </div>
+    </div>
+
+
+<style>
+    body {
+        font-family: 'Nunito', sans-serif;
+    }
+
+    .container {
+        max-width: 100%;
+    }
+
+    .navbar-splash {
+        background-color: #30404D;
+        position: relative;
+        margin-bottom: 20px;
+        padding: 10px 0;
+        width: 100%;
+        transition: 100ms;
+        z-index: 5;
+    }
+
+    .nav-item {
+        display: inline-block;
+        padding: 8px 18px;
+        background-color: transparent;
+    }
+
+    .nav-item:hover {
+        opacity: 0.8;
+    }
+
+    .item-text {
+        color: white;
+        margin: 0 3px;
+    }
+
+    .item-text:hover {
+        text-decoration: none;
+        color: white;
+    }
+
+    .course-title {
+        color: white;
+        font-size: larger;
+        margin: 0 3px;
+        padding-left: 10px;
+    }
+
+    .course-container {
+        width: 70%;
+        margin: 0 auto;
+        position: relative;
+        text-align: justify;
+    }
+
+    .icon-image {
+        margin: -40px auto;
+        display: block;
+    }
+
+    .img-center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50%;
+    }
+
+    h1 {
+        font-size: 30px;
+        line-height: 140%;
+        font-weight: bold;
+    }
+
+    h2 {
+        font-size: 27px;
+        line-height: 140%;
+    }
+
+    h3 {
+        font-size: 20px;
+        line-height: 140%;
+    }
+
+    h4 {
+        margin-top: 20px;
+        font-size: 19px;
+        font-weight: bold;
+        line-height: 140%;
+    }
+
+    p {
+        font-size: 18px;
+    }
+
+    code {
+        font-size: 18px;
+    }
+</style>
+</body></html>
