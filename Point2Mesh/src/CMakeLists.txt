@@ -8,6 +8,7 @@ set(POINT2MESH_SOURCE
     triangle.cpp
     vertex.cpp
     utils.cpp
+    testing.h
 
     # Spcae datastructures
     octree.cpp

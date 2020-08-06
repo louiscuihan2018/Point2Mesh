@@ -20,7 +20,7 @@ class Sphere{
         Vector3D center;
         double radius;
         Sphere(){};
-        Sphere(CGL::Vector3D v, double r);
+        Sphere(Vector3D v, double r);
     
 };
 #endif /* sphere_h */
