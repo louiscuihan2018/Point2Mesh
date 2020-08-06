@@ -28,6 +28,8 @@ class Vertex{
         Vertex(Vector3D a, Vector3D b);
         void add_edge(Edge *edge);
         void add_triangle(Triangle *triangle);
+        bool compatible(Edge &edge);
+        bool compatible(Vertex &v1, Vertex &v2);
 };
 
 #endif /* vertex_h */

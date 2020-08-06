@@ -37,3 +37,11 @@ void Edge::add_triangle(Triangle* triangle) {
     }
 }
 
+Vertex* Edge::geta() {
+    return this->a;
+}
+
+Vertex* Edge::getb() {
+    return this->b;
+}
+
