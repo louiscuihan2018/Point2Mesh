@@ -14,7 +14,7 @@ set(POINT2MESH_SOURCE
 
     # Application
     main.cpp
-)
+ )
 
 # Windows-only sources
 # if(WIN32)

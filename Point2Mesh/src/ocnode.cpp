@@ -1,4 +1,5 @@
 #include "ocnode.h"
+#include <iostream>
 
 using namespace std;
 
@@ -7,20 +8,20 @@ namespace CGL {
     OcNode::OcNode() {
         parent = NULL;
         depth = 0;
-        is_leaf = false;
+        is_leaf = true;
         size = origin = locs = Vector3D(0);
 
         for (int i = 0; i < 8; i++)
             children[i] = NULL;
     }
 
-    OcNode::OcNode(Vector3D og, Vector3D sz, OcNode* pr, int dp) {
+    OcNode::OcNode(Vector3D og, Vector3D sz, Vector3D lc, OcNode* pr, uint dp) {
         parent = pr;
         depth = dp;
         origin = og;
         size = sz;
+        locs = lc;
         is_leaf = (dp == 0);
-        locs = Vector3D(0);
 
         for (int i = 0; i < 8; i++)
             children[i] = NULL;
@@ -36,10 +37,9 @@ namespace CGL {
             delete children[i];
     }
 
-    void OcNode::addChildren(int index, Vector3D child_og) {
-        Vector3D child_sz = size / 2.0;
-        int child_dp = depth - 1;
-
-        children[index] = new OcNode(child_og, child_sz, this, child_dp);
+    void OcNode::addChildren(uint index, Vector3D og, Vector3D sz) {
+        cout << "index: " << index << endl;
+        uint child_dp = depth - 1;
+        children[index] = new OcNode(og, sz, NULL, this, child_dp);
     }
 }

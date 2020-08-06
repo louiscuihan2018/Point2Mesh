@@ -33,7 +33,7 @@ void Edge::add_triangle(Triangle* triangle) {
         this->face2 = triangle;
     }
     else {
-        std::cout<<"Already two triangles"<<endl;
+        cout<< "Already two triangles" <<endl;
     }
 }
 

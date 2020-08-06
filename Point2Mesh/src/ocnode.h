@@ -1,7 +1,7 @@
 #ifndef ocnode_h
 #define ocnode_h
 
-#include "CGL\Vector3D.h"
+#include "vertex.h"
 #include <list>
 
 using namespace std;
@@ -11,11 +11,11 @@ namespace CGL {
     public:
         // constructor/desctructor
         OcNode();
-        OcNode(Vector3D og, Vector3D sz, OcNode* pr, int dp);
+        OcNode(Vector3D og, Vector3D sz, Vector3D lc, OcNode* pr, uint dp);
         ~OcNode();
 
         // important methods
-        void addChildren(int index, Vector3D child_og);
+        void addChildren(uint index, Vector3D og, Vector3D sz);
 
         // class members
 
@@ -23,7 +23,7 @@ namespace CGL {
         OcNode* parent;
         OcNode* children[8];
 
-        int depth;
+        uint depth;
         bool is_leaf;
 
         Vector3D size;
@@ -31,7 +31,7 @@ namespace CGL {
         // locational codes for this node
         Vector3D locs;
 
-        list<Vector3D> pts;
+        list<Vertex*> pts;
     };
 }
 

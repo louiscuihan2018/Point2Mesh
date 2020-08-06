@@ -5,35 +5,37 @@
 #ifndef octree_h
 #define octree_h
 
-#include "CGL\Vector3D.h"
 #include "ocnode.h"
+#include "vertex.h"
 #include <list>
 #include <vector>
 
 using namespace std;
 
 namespace CGL {
-    class OcTree {
+    class OcTree 
+    {
     public:
         // constructor/destructor
         OcTree();
-        OcTree(int depth);
-        OcTree(Vector3D og, Vector3D sz, int depth);
+        OcTree(uint depth);
+        OcTree(Vector3D og, Vector3D sz, uint depth);
         ~OcTree();
 
         // class members
         OcNode* root;
 
-        int max_depth;
-        int binsize;
+        uint max_depth;
+        uint binsize;
 
         Vector3D size;
         Vector3D origin;
 
         // class methods
-        void populate_tree(vector<Vector3D>::iterator start, vector<Vector3D>::iterator end);
+        void populate_tree(vector<Vertex*>::iterator start, vector<Vertex*>::iterator end);
 
-    protected:
+        // debugging helpers
+        void print_node_info(bool verbose);
     };
 }
 
