@@ -67,5 +67,13 @@ int main(int argc, const char * argv[]) {
     Triangle* t = std::get<0>(foo);
     std::cout << t->c->point.y;
     std::cout << "\n";
+    std::cout << "\n";
+    
+    vector<Vector3D> range = read_and_range();
+    std::cout << range[0].y;
+    std::cout << "\n";
+    std::cout << range[1].x;
+    std::cout << "\n";
     return 0;
+    
 }
