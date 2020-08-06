@@ -7,21 +7,33 @@
 //
 
 #include <stdio.h>
-#include "vertex.h"
+#include <iostream>
+//#include "vertex.h"
 #include "edge.h"
 #include <vector>
+#include "CGL/CGL.h"
 #include "CGL/vector3D.h"
 
 using namespace std;
 
-namespace CGL {
-    
-    Edge::Edge(Vertex* a, Vertex* b) {
-        this->a = a;
-        this->b = b;
-        this->is_inner = false;
-//        this->a.adjacent_edges.push_back(&this);
-//        this->b.adjacent_edges.push_back(&this);
-    }
-
+Edge::Edge(Vertex* a, Vertex* b) {
+    this->a = a;
+    this->b = b;
+    this->is_inner = false;
+    this->a->add_edge(this);
+    this->b->add_edge(this);
+    this->face1 = NULL;
+    this->face2 = NULL;
 }
+void Edge::add_triangle(Triangle* triangle) {
+    if (this->face1 == NULL) {
+        this->face1 = triangle;
+    }
+    else if (this->face2 == NULL) {
+        this->face2 = triangle;
+    }
+    else {
+        std::cout<<"Already two triangles"<<endl;
+    }
+}
+
