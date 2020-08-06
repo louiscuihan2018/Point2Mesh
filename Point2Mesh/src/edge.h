@@ -28,5 +28,8 @@ class Edge{
         Edge(){};
         Edge(Vertex* a, Vertex* b);
         void add_triangle(Triangle *triangle);
+        Vertex* geta();
+        Vertex* getb();
+        
 };
 #endif /* edge_h */

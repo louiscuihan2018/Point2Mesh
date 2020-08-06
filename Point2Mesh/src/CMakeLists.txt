@@ -7,6 +7,7 @@ set(POINT2MESH_SOURCE
     sphere.cpp
     triangle.cpp
     vertex.cpp
+    utils.cpp
 
     # Spcae datastructures
     octree.cpp
