@@ -8,6 +8,10 @@ set(POINT2MESH_SOURCE
     triangle.cpp
     vertex.cpp
 
+    # Spcae datastructures
+    octree.cpp
+    ocnode.cpp
+
     # Application
     main.cpp
 )
