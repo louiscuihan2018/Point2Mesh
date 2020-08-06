@@ -10,21 +10,23 @@
 #define edge_h
 
 #include <vector>
+#include "CGL/CGL.h"
 #include "CGL/vector3D.h"
 #include "vertex.h"
 //#include "triangle.h"
 
 using namespace std;
-namespace CGL {
-    class Edge{
-        public:
-            Vertex* a;
-            Vertex* b;
-            Tri_list adjacent_triangles;
-            bool is_inner;
-        // future constructors use pointers
-            Edge(){};
-            Edge(Vertex* a, Vertex* b);
-    };
-}
+
+class Edge{
+    public:
+        Vertex* a;
+        Vertex* b;
+        Triangle* face1;
+        Triangle* face2;
+        bool is_inner;
+    // future constructors use pointers
+        Edge(){};
+        Edge(Vertex* a, Vertex* b);
+        void add_triangle(Triangle *triangle);
+};
 #endif /* edge_h */

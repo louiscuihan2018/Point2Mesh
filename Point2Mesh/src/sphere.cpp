@@ -10,16 +10,15 @@
 #include "vertex.h"
 #include "sphere.h"
 #include <vector>
+#include "CGL/CGL.h"
 #include "CGL/vector3D.h"
 
 using namespace std;
+using namespace CGL;
 
-namespace CGL {
-    
-    Sphere::Sphere(Vector3D a, double r) {
-        this->center = a;
-        this->radius = r;
-    }
-
+Sphere::Sphere(Vector3D a, double r) {
+    this->center = a;
+    this->radius = r;
 }
+
 

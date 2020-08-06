@@ -8,18 +8,19 @@
 #ifndef sphere_h
 #define sphere_h
 #include <vector>
+#include "CGL/CGL.h"
 #include "CGL/vector3D.h"
 #include "vertex.h"
 
 using namespace std;
-namespace CGL {
-    class Sphere{
-        public:
-            Vector3D center;
-            double radius;
-            Sphere(){};
-            Sphere(Vector3D v, double r);
-        
-    };
-}
+using namespace CGL;
+
+class Sphere{
+    public:
+        Vector3D center;
+        double radius;
+        Sphere(){};
+        Sphere(CGL::Vector3D v, double r);
+    
+};
 #endif /* sphere_h */
