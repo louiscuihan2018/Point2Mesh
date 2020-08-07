@@ -34,14 +34,14 @@ namespace CGL {
         }
     }
 
-    void OcTree::populate_tree(vector<Vertex*>::iterator start, vector<Vertex*>::iterator end) {
+    void OcTree::populate_tree(vector<Vertex>::iterator start, vector<Vertex>::iterator end) {
 
-        vector<Vertex*>::iterator it = start;
+        vector<Vertex>::iterator it = start;
         for (; it != end; it++) {
             OcNode* node = root;
             uint l = node->depth - 1;
 
-            Vector3D& p = (*it)->point, q = node->origin;
+            Vector3D& p = (*it).point, q = node->origin;
             uint xloc = (uint) binsize * (p.x - q.x) / size.x;
             uint yloc = (uint) binsize * (p.y - q.y) / size.y;
             uint zloc = (uint) binsize * (p.z - q.z) / size.z;
@@ -72,7 +72,7 @@ namespace CGL {
                 l--;
             }
 
-            node->pts.push_back(*it);
+            node->pts.push_back(&(*it));
         }
     }
 

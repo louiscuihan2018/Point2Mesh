@@ -27,8 +27,8 @@ namespace CGL {
 
         OcNode* find_node_from_point(Vector3D& query);
 
-        uint get_sorted_neighbors(Vector3D& query, map<double, Vertex*>* neighbors);
-        void iterate_node(Vector3D& query, OcNode* node, map<double, Vertex*>* neighbors);
+        uint get_sorted_neighbors(Vector3D& query, Neighbor_map* neighbors);
+        void iterate_node(Vector3D& query, OcNode* node, Neighbor_map* neighbors);
 
         uint xloc_left(OcNode* node) const;
         uint xloc_right(OcNode* node) const;

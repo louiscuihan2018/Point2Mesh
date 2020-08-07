@@ -21,7 +21,7 @@ namespace CGL {
         }
     }
 
-    uint OcSearch::get_sorted_neighbors(Vector3D& query, map<double, Vertex*>* neighbors) {
+    uint OcSearch::get_sorted_neighbors(Vector3D& query, Neighbor_map* neighbors) {
         OcNode* q_node = find_node_from_point(query);
         double radius = s_radius;
 
@@ -62,7 +62,7 @@ namespace CGL {
         return neighbors->size();
     }
 
-    void OcSearch::iterate_node(Vector3D& query, OcNode* node, map<double, Vertex*>* neighbors) {
+    void OcSearch::iterate_node(Vector3D& query, OcNode* node, Neighbor_map* neighbors) {
         if (node->depth != 0) {
             for (int i = 0; i < 8; i++)
                 if (node->children[i] != NULL)
@@ -73,7 +73,7 @@ namespace CGL {
         for (auto vi = vs.begin(); vi != vs.end(); vi++) {
             Vector3D& p = (*vi)->point;
             double dist = (query - p).norm();
-            if (dist < s_radius)
+            if (dist <= s_radius)
                 neighbors->insert(pair<double, Vertex*>(dist, *vi));
         }
     }
