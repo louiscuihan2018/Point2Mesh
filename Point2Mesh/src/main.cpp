@@ -17,7 +17,5 @@
 using namespace CGL;
 
 int main(int argc, const char * argv[]) {
-    // insert code here...
-    //testing::read_range_test();
-    testing::octree_test_basic();
+    testing::seed_tri_test_simple();
 }

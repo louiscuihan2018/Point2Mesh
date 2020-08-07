@@ -19,10 +19,10 @@ namespace testing {
         Vector3D og(0, 0, 0);
         Vector3D sz(2, 2, 2);
 
-        OcTree t(og, sz, 3);
+        OcTree t(og, sz, 2);
 
         vector<Vertex*> vs;
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 5; i++) {
             double x = 2 * ((double)rand()) / RAND_MAX;
             double y = 2 * ((double)rand()) / RAND_MAX;
             double z = 2 * ((double)rand()) / RAND_MAX;
@@ -40,7 +40,7 @@ namespace testing {
         Vector3D og(0, 0, 0);
         Vector3D sz(2, 2, 2);
 
-        OcTree t(og, sz, 3);
+        OcTree t(og, sz, 2);
 
         vector<Vertex*> vs;
         Vertex a = Vertex(Vector3D(0.1, 0.1, 1.9), NULL);
@@ -50,6 +50,7 @@ namespace testing {
         vs.push_back(&b);
         vs.push_back(&c);
 
+        for (auto v : vs) cout << v->point << endl;
         t.populate_tree(vs.begin(), vs.end());
         t.print_node_info(true);
     }
@@ -120,5 +121,45 @@ namespace testing {
         std::cout << "\n";
         std::cout << range[0].x;
         std::cout << "\n";
+    }
+
+    void seed_tri_test() {
+        Vector3D x_pos = Vector3D(1, 0, 0);
+        Vector3D y_pos_1 = Vector3D(0, -1, 0);
+        Vector3D y_pos_2 = Vector3D(0, 1, 0);
+        Vector3D z_pos = Vector3D(0, 0, 3);
+        Vector3D n = Vector3D(0, 0, 1);
+        Vertex v1 = Vertex(x_pos, n);
+        Vertex v2 = Vertex(y_pos_1, n);
+        Vertex v3 = Vertex(y_pos_2, n);
+        Vertex v4 = Vertex(z_pos, n);
+        
+        Vector3D o = Vector3D(0, -1, 0);
+        Vector3D s = Vector3D(1, 2, 3);
+        
+        OcTree tree = OcTree(o, s, 1);
+        
+    }
+
+    void seed_tri_test_simple() {
+        Vector3D x_pos = Vector3D(1, 0, 0);
+        Vector3D y_pos_1 = Vector3D(0, -1, 0);
+        Vector3D y_pos_2 = Vector3D(0, 1, 0);
+        Vector3D z_pos_1 = Vector3D(0, 0, 3);
+        Vector3D z_pos_2 = Vector3D(0, 0, -3);
+        Vector3D n = Vector3D(0, 0, 1);
+        Vertex v1 = Vertex(x_pos, n);
+        Vertex v2 = Vertex(y_pos_1, n);
+        Vertex v3 = Vertex(y_pos_2, n);
+        Vertex v4 = Vertex(z_pos_1, n);
+        Vertex v5 = Vertex(z_pos_2, n);
+        vector<Vertex*> curr;
+        curr.push_back(&v5);
+        curr.push_back(&v3);
+        curr.push_back(&v4);
+        curr.push_back(&v1);
+        curr.push_back(&v2);
+        
+        Triangle* t = FindSeedTriangle(curr, 1.0);
     }
 }
