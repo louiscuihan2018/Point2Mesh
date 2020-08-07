@@ -13,7 +13,7 @@ namespace CGL {
         origin = Vector3D();
     }
 
-    OcTree::OcTree(uint depth) : OcTree() { max_depth = depth; binsize = (uint)pow(2, depth); }
+//    OcTree::OcTree(uint depth) : OcTree() { max_depth = depth; binsize = (uint)pow(2, depth); }
 
     OcTree::OcTree(Vector3D og, Vector3D sz, uint depth) {
         origin = og;

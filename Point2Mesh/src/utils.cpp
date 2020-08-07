@@ -8,7 +8,9 @@
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
+#include <chrono>
 #include "utils.h"
+#include "types.h"
 #include "vertex.h"
 #include "edge.h"
 #include "sphere.h"
@@ -30,11 +32,13 @@ pair<Triangle*, bool> check_and_initialize_tri(Vertex* a, Vertex* b, Vertex* c) 
     }
 }
 
-vector<Vector3D> read_and_range() {
+vector<Vector3D> read_and_range(string name) {
     // name of file change here
-    // need to be in the target or working folder 
-    ifstream file("tex.xyz");
-    int v_number;
+    // need to be in the target or working folder
+    typedef std::chrono::high_resolution_clock Clock;
+    auto t1 = Clock::now();
+    ifstream file(name);
+    uint v_number;
     file >> v_number;
     std::cout<< v_number;
     std::cout<< "\n";
@@ -91,6 +95,9 @@ vector<Vector3D> read_and_range() {
     Vector3D max = Vector3D(maxx, maxy, maxz);
     range.push_back(min);
     range.push_back(max);
+    
+    auto t2 = Clock::now();
+    std::cout << "Time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count() / 1000000<< " milliseconds" << std::endl;
     return range;
 }
 
