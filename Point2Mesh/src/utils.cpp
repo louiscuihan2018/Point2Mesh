@@ -15,6 +15,7 @@
 #include "edge.h"
 #include "sphere.h"
 #include "triangle.h"
+#include "ocsearch.h"
 using namespace CGL;
 
 pair<Triangle*, bool> check_and_initialize_tri(Vertex* a, Vertex* b, Vertex* c) {
@@ -101,4 +102,114 @@ vector<Vector3D> read_and_range(string name) {
     return range;
 }
 
+//Triangle* FindSeedTriangle(OcTree* tree, double r) {
+//    Triangle* result = NULL;
+//    result = FindSeedTriangle(tree, tree->root, r);
+//    return result;
+//}
+//
+//Triangle* FindSeedTriangle(OcTree* tree, OcNode* node, double r) {
+////    Triangle* result = NULL;
+//    if (node->depth != 0) {
+//        for (int i = 0; i < 8; i ++) {
+//            if (node->children[i] != NULL) {
+//                Triangle* curr = FindSeedTriangle(tree, node->children[i], r);
+//                if (curr != NULL) {
+//                    return curr;
+//                }
+//            }
+//        }
+//        return NULL;
+//    } else {
+//        OcSearch* curr = new OcSearch(tree, 2 * r, 1);
+//        for (Vertex* x : node->pts) {
+//            map<double, Vertex*> n2r = curr->get_sorted_neighbors(x->point, 2 * r);
+//            bool clear = true;
+//            for (auto y : n2r) {
+//                for (auto z: n2r) {
+//                    if (y == z) {
+//                        continue;
+//                    }
+//
+//                    if ((!x->compatible(*(y.second), *(z.second))) || (!x->compatible(*(y.second), *(z.second)))) {
+//                        continue;
+//                    }
+//
+//                    Triangle* t1 = new Triangle(x, y.second, z.second);
+//                    Sphere s1 = t1->construct_ball(r);
+//
+//                    for (auto m : n2r) {
+//                        if (m == y || m == z) {
+//                            continue;
+//                        }
+//                        Vector3D diff = m.second->point - s1.center;
+//                        double dist = diff.norm();
+//                        if (dist < r) {
+//                            clear = false;
+//                        }
+//                    }
+//
+//                    if (clear) {
+//                        return t1;
+//                    }
+//                }
+//            }
+//        }
+//        return NULL;
+//    }
+//
+//}
 
+Triangle* FindSeedTriangle(vector<Vertex*> vlist, double r) {
+    Triangle* result = NULL;
+    for (Vertex* x : vlist) {
+        vector<Vertex*> curr_list;
+        bool clear = true;
+        for (Vertex* y : vlist) {
+            if (y == x) {
+                continue;
+            }
+            else {
+                Vector3D diff = x->point - y->point;
+                double dist = diff.norm();
+                if (dist <= 2 * r) {
+                    curr_list.push_back(y);
+                }
+            }
+        }
+        
+        for (Vertex* i : curr_list) {
+            for (Vertex* j : curr_list) {
+                if (i == j) {
+                    continue;
+                }
+                
+                if ((!x->compatible(*(i), *(j))) || (!x->compatible(*(i), *(j)))) {
+                    continue;
+                }
+                
+                Triangle* t1 = new Triangle(x, i, j);
+                Sphere s1 = t1->construct_ball(r);
+                
+                for (Vertex* k : curr_list) {
+                    if (k == i || k == j) {
+                        continue;
+                    }
+                    Vector3D diff = k->point - s1.center;
+                    double dist = diff.norm();
+                    
+                    if (dist < r) {
+                        clear = false;
+                    }
+
+                }
+                if (clear) {
+                    return t1;
+                }
+                
+            }
+        }
+        
+    }
+    
+}

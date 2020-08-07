@@ -12,11 +12,18 @@
 #include "edge.h"
 #include "sphere.h"
 #include "triangle.h"
+#include "octree.h"
 using namespace CGL;
 
 pair<Triangle*, bool> check_and_initialize_tri(Vertex* a, Vertex* b, Vertex* c);
 
 vector<Vector3D> read_and_range(string name);
+
+Triangle* FindSeedTriangle(OcTree* tree, double r);
+
+Triangle* FindSeedTriangle(OcTree* tree, OcNode* node, double r);
+
+Triangle* FindSeedTriangle(vector<Vertex*> vlist, double r);
 
 
 #endif /* utils_hj_h */
