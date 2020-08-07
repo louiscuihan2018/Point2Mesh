@@ -59,13 +59,15 @@ namespace CGL {
 
                 uint index = (x << 2) + (y << 1) + z;
 
+                xloc += x << l; yloc += y << l; zloc += z << l;
                 if (node->children[index] == NULL) {
                     Vector3D child_sz = node->size / 2.0;
-                    Vector3D child_og(origin.x + x * child_sz.x, origin.y + y * child_sz.y, origin.z + z * child_sz.z);
-                    node->addChildren(index, child_og, child_sz);
+                    q = node->origin;
+                    Vector3D child_og(q.x + x * child_sz.x, q.y + y * child_sz.y, q.z + z * child_sz.z);
+                    Vector3D child_lc(xloc, yloc, zloc);
+                    node->addChildren(index, child_og, child_sz, child_lc);
                 }
-
-                xloc += x << l; yloc += y << l; zloc += z << l;
+                
                 node = node->children[index];
                 l--;
             }
@@ -89,9 +91,10 @@ namespace CGL {
             }
             if (node->is_leaf) {
                 if (verbose)
-                    cout << node->origin << " " << node->size << endl;
+                    cout << node->origin << " " << node->size << ": " << endl;
                 for (auto v : node->pts)
                     cout << v->point << " ";
+                cout << "\n";
                 continue;
             }
             for (int i = 0; i < 8; i++)

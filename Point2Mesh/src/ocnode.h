@@ -15,7 +15,7 @@ namespace CGL {
         ~OcNode();
 
         // important methods
-        void addChildren(uint index, Vector3D og, Vector3D sz);
+        void addChildren(uint index, Vector3D og, Vector3D sz, Vector3D lc);
 
         // class members
 

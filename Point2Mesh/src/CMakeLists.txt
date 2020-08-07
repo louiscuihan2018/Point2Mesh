@@ -12,6 +12,7 @@ set(POINT2MESH_SOURCE
     # Spcae datastructures
     octree.cpp
     ocnode.cpp
+    ocsearch.cpp
 
     # Application
     main.cpp

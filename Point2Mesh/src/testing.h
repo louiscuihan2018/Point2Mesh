@@ -18,10 +18,10 @@ namespace testing {
         Vector3D og(0, 0, 0);
         Vector3D sz(2, 2, 2);
 
-        OcTree t(og, sz, 2);
+        OcTree t(og, sz, 3);
 
         vector<Vertex*> vs;
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 30; i++) {
             double x = 2 * ((double)rand()) / RAND_MAX;
             double y = 2 * ((double)rand()) / RAND_MAX;
             double z = 2 * ((double)rand()) / RAND_MAX;
@@ -39,12 +39,11 @@ namespace testing {
         Vector3D og(0, 0, 0);
         Vector3D sz(2, 2, 2);
 
-        OcTree t(og, sz, 2);
+        OcTree t(og, sz, 3);
 
         vector<Vertex*> vs;
         vs.push_back(&Vertex(Vector3D(1.9, 1.9, 1.9), NULL));
 
-        for (auto v : vs) cout << v->point << endl;
         t.populate_tree(vs.begin(), vs.end());
         t.print_node_info(true);
     }
