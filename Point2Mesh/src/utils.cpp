@@ -33,18 +33,17 @@ pair<Triangle*, bool> check_and_initialize_tri(Vertex* a, Vertex* b, Vertex* c) 
     }
 }
 
-vector<Vector3D> read_and_range(string name) {
+pair< vector<Vector3D>,vector<Vertex> > read_and_range(string name) {
     // name of file change here
     // need to be in the target or working folder
-    typedef std::chrono::high_resolution_clock Clock;
-    auto t1 = Clock::now();
     ifstream file(name);
     uint v_number;
     file >> v_number;
-    std::cout<< v_number;
-    std::cout<< "\n";
-    std::cout<< "\n";
-    vector<Vertex*> vertices;
+//    std::cout<< v_number;
+//    std::cout << "Vertex number: " << v_number <<std::endl;
+//    std::cout<< "\n";
+//    vector<Vertex*> vertices;
+    vector<Vertex> vertices_t;
     vector<Vector3D> range;
     double minx = HUGE_VAL;
     double miny = HUGE_VAL;
@@ -88,18 +87,16 @@ vector<Vector3D> read_and_range(string name) {
         Vector3D curr_point = Vector3D(x, y, z);
         Vector3D curr_normal = Vector3D(dx, dy, dz);
         Vertex *curr = new Vertex(curr_point, curr_normal);
-        vertices.push_back(curr);
-//        std::cout<< curr_normal.x;
-//        std::cout<< "\n";
+//        vertices.push_back(curr);
+        vertices_t.push_back(*curr);
     }
     Vector3D min = Vector3D(minx, miny, minz);
     Vector3D max = Vector3D(maxx, maxy, maxz);
     range.push_back(min);
     range.push_back(max);
     
-    auto t2 = Clock::now();
-    std::cout << "Time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count() / 1000000<< " milliseconds" << std::endl;
-    return range;
+    pair< vector<Vector3D>, vector<Vertex> > result = make_pair(range, vertices_t);
+    return result;
 }
 
 Triangle* FindSeedTriangle(OcTree* tree, double r) {

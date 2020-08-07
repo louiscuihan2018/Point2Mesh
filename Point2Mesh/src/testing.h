@@ -116,12 +116,37 @@ namespace testing {
 
     void read_range_test() {
         //remember to set folder and make sure the file is within the folder with correct format;
+        typedef std::chrono::high_resolution_clock Clock;
+        // test of read time
+//        auto t1 = Clock::now();
         string name = "bun_zipper.xyz";
-        vector<Vector3D> range = read_and_range(name);
-        std::cout << range[0].y;
-        std::cout << "\n";
-        std::cout << range[0].x;
-        std::cout << "\n";
+        pair< vector<Vector3D>, vector<Vertex> > res = read_and_range(name);
+//        auto t2 = Clock::now();
+//               std::cout << "Time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count() / 1000000<< " milliseconds" << std::endl;
+        
+        vector<Vertex> vertices = res.second;
+        Vector3D min = res.first[0];
+        Vector3D max = res.first[1];
+        
+        // test of construct time
+//        auto t1 = Clock::now();
+        Vector3D o = min;
+        Vector3D sz = max - min;
+        uint dep = 6;
+        OcTree tree = OcTree(o, sz, dep);
+        tree.populate_tree(vertices.begin(), vertices.end());
+//        auto t2 = Clock::now();
+//               std::cout << "Time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count() / 1000000<< " milliseconds" << std::endl;
+
+        // test of search time
+        auto t1 = Clock::now();
+        Vector3D a = Vector3D(0,0,0);
+        OcSearch s = OcSearch(&tree, 0.0003, dep - 1);
+        Neighbor_map curr;
+        s.get_sorted_neighbors(a, &curr);
+        
+        auto t2 = Clock::now();
+        std::cout << "Time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count() / 1000000<< " milliseconds" << std::endl;
     }
 
     void seed_tri_test() {

@@ -20,5 +20,6 @@ int main(int argc, const char * argv[]) {
     //testing::seed_tri_test_simple();
 //    testing::search_neighbor_test();
 //    testing::seed_tri_test();
-    testing::seed_tri_test();
+//    testing::seed_tri_test();
+    testing::read_range_test();
 }
