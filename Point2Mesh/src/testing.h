@@ -43,8 +43,12 @@ namespace testing {
         OcTree t(og, sz, 3);
 
         vector<Vertex*> vs;
-        Vertex curr = Vertex(Vector3D(1.9, 1.9, 1.9), NULL);
-        vs.push_back(&curr);
+        Vertex a = Vertex(Vector3D(0.1, 0.1, 1.9), NULL);
+        Vertex b = Vertex(Vector3D(0.6, 0.1, 1.9), NULL);
+        Vertex c = Vertex(Vector3D(1.1, 0.1, 1.9), NULL);
+        vs.push_back(&a);
+        vs.push_back(&b);
+        vs.push_back(&c);
 
         t.populate_tree(vs.begin(), vs.end());
         t.print_node_info(true);
@@ -116,6 +120,5 @@ namespace testing {
         std::cout << "\n";
         std::cout << range[0].x;
         std::cout << "\n";
-        return 0;
     }
 }

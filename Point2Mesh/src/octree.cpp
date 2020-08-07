@@ -20,7 +20,7 @@ namespace CGL {
         size = sz;
         max_depth = depth;
         binsize = (uint)pow(2, depth - 1);
-        root = new OcNode(og, sz, NULL, NULL, depth - 1);
+        root = new OcNode(og, sz, Vector3D(0), NULL, depth - 1);
     }
 
     OcTree::~OcTree() {
@@ -58,14 +58,14 @@ namespace CGL {
                 //cout << Vector3D(x, y, z) << endl;
 
                 uint index = (x << 2) + (y << 1) + z;
-
-                xloc += x << l; yloc += y << l; zloc += z << l;
+                
                 if (node->children[index] == NULL) {
                     Vector3D child_sz = node->size / 2.0;
                     q = node->origin;
                     Vector3D child_og(q.x + x * child_sz.x, q.y + y * child_sz.y, q.z + z * child_sz.z);
-                    Vector3D child_lc(xloc, yloc, zloc);
-                    node->addChildren(index, child_og, child_sz, child_lc);
+                    Vector3D tmp(x << l, y << l, z << l);
+
+                    node->addChildren(index, child_og, child_sz, node->locs + tmp);
                 }
                 
                 node = node->children[index];
@@ -91,11 +91,15 @@ namespace CGL {
             }
             if (node->is_leaf) {
                 if (verbose)
-                    cout << node->origin << " " << node->size << ": " << endl;
+                    cout << "origin:" << node->origin << " size:" << node->size << " locs:" << node->locs << ": " << endl;
                 for (auto v : node->pts)
                     cout << v->point << " ";
                 cout << "\n";
                 continue;
+            }
+            else {
+                if (verbose)
+                    cout << "origin:" << node->origin << " size:" << node->size << " locs:" << node->locs << ": " << endl;
             }
             for (int i = 0; i < 8; i++)
                 if (node->children[i] != NULL)

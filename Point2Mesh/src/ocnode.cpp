@@ -38,7 +38,6 @@ namespace CGL {
     }
 
     void OcNode::addChildren(uint index, Vector3D og, Vector3D sz, Vector3D lc) {
-        cout << "index: " << index << endl;
         uint child_dp = depth - 1;
         children[index] = new OcNode(og, sz, lc, this, child_dp);
     }

@@ -23,8 +23,12 @@ namespace CGL {
 
         // locating methods
         void go_to_level(Vector3D locs, uint lv, OcNode** node);
+        void go_to_level(uint xloc, uint yloc, uint zloc, uint lv, OcNode** node);
 
-        map<double, Vertex*> get_sorted_neighbors(Vector3D query, double radius);
+        OcNode* find_node_from_point(Vector3D& query);
+
+        uint get_sorted_neighbors(Vector3D& query, map<double, Vertex*>* neighbors);
+        void iterate_node(Vector3D& query, OcNode* node, map<double, Vertex*>* neighbors);
 
         uint xloc_left(OcNode* node) const;
         uint xloc_right(OcNode* node) const;
