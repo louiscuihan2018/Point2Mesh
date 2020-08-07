@@ -125,30 +125,50 @@ namespace testing {
     }
 
     void seed_tri_test() {
-        Vector3D x_pos = Vector3D(1, 0, 0);
-        Vector3D y_pos_1 = Vector3D(0, -1, 0);
-        Vector3D y_pos_2 = Vector3D(0, 1, 0);
-        Vector3D z_pos = Vector3D(0, 0, 3);
-        Vector3D n = Vector3D(0, 0, 1);
-        Vertex v1 = Vertex(x_pos, n);
-        Vertex v2 = Vertex(y_pos_1, n);
-        Vertex v3 = Vertex(y_pos_2, n);
-        Vertex v4 = Vertex(z_pos, n);
-
-        Vector3D o = Vector3D(0, -1, 0);
-        Vector3D s = Vector3D(1, 2, 3);
-
-        OcTree tree = OcTree(o, s, 1);
-
-    }
-
-    void seed_tri_test_simple() {
+        
+        // test of octree build and then search for seed triangle based on the tree
+        
+        // construct position and normal vectors for vertices
         Vector3D x_pos = Vector3D(1, 0, 0);
         Vector3D y_pos_1 = Vector3D(0, -1, 0);
         Vector3D y_pos_2 = Vector3D(0, 1, 0);
         Vector3D z_pos_1 = Vector3D(0, 0, 3);
         Vector3D z_pos_2 = Vector3D(0, 0, -3);
         Vector3D n = Vector3D(0, 0, 1);
+        
+        //construct vertices and store in a vector
+        Vertex v1 = Vertex(x_pos, n);
+        Vertex v2 = Vertex(y_pos_1, n);
+        Vertex v3 = Vertex(y_pos_2, n);
+        Vertex v4 = Vertex(z_pos_1, n);
+        Vertex v5 = Vertex(z_pos_2, n);
+        vector<Vertex> curr;
+        curr.push_back(v5);
+        curr.push_back(v3);
+        curr.push_back(v4);
+        curr.push_back(v1);
+        curr.push_back(v2);
+        
+        //construct the octree
+        Vector3D o = Vector3D(0, -1, -3);
+        Vector3D s = Vector3D(1, 2, 6);
+
+        OcTree tree = OcTree(o, s, 2);
+        tree.populate_tree(curr.begin(), curr.end());
+        
+        // run find triangle for the tree, to check out the result, use breakpoints to check the vertices of the triangle
+        Triangle* t = FindSeedTriangle(&tree, 1.0);
+    }
+
+    void seed_tri_test_simple() {
+        
+        Vector3D x_pos = Vector3D(1, 0, 0);
+        Vector3D y_pos_1 = Vector3D(0, -1, 0);
+        Vector3D y_pos_2 = Vector3D(0, 1, 0);
+        Vector3D z_pos_1 = Vector3D(0, 0, 3);
+        Vector3D z_pos_2 = Vector3D(0, 0, -3);
+        Vector3D n = Vector3D(0, 0, 1);
+        
         Vertex v1 = Vertex(x_pos, n);
         Vertex v2 = Vertex(y_pos_1, n);
         Vertex v3 = Vertex(y_pos_2, n);

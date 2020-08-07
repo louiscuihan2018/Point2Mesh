@@ -102,63 +102,65 @@ vector<Vector3D> read_and_range(string name) {
     return range;
 }
 
-//Triangle* FindSeedTriangle(OcTree* tree, double r) {
+Triangle* FindSeedTriangle(OcTree* tree, double r) {
+    Triangle* result = NULL;
+    result = FindSeedTriangle(tree, tree->root, r);
+    return result;
+}
+
+Triangle* FindSeedTriangle(OcTree* tree, OcNode* node, double r) {
 //    Triangle* result = NULL;
-//    result = FindSeedTriangle(tree, tree->root, r);
-//    return result;
-//}
-//
-//Triangle* FindSeedTriangle(OcTree* tree, OcNode* node, double r) {
-////    Triangle* result = NULL;
-//    if (node->depth != 0) {
-//        for (int i = 0; i < 8; i ++) {
-//            if (node->children[i] != NULL) {
-//                Triangle* curr = FindSeedTriangle(tree, node->children[i], r);
-//                if (curr != NULL) {
-//                    return curr;
-//                }
-//            }
-//        }
-//        return NULL;
-//    } else {
-//        OcSearch* curr = new OcSearch(tree, 2 * r, 1);
-//        for (Vertex* x : node->pts) {
-//            map<double, Vertex*> n2r = curr->get_sorted_neighbors(x->point, 2 * r);
-//            bool clear = true;
-//            for (auto y : n2r) {
-//                for (auto z: n2r) {
-//                    if (y == z) {
-//                        continue;
-//                    }
-//
-//                    if ((!x->compatible(*(y.second), *(z.second))) || (!x->compatible(*(y.second), *(z.second)))) {
-//                        continue;
-//                    }
-//
-//                    Triangle* t1 = new Triangle(x, y.second, z.second);
-//                    Sphere s1 = t1->construct_ball(r);
-//
-//                    for (auto m : n2r) {
-//                        if (m == y || m == z) {
-//                            continue;
-//                        }
-//                        Vector3D diff = m.second->point - s1.center;
-//                        double dist = diff.norm();
-//                        if (dist < r) {
-//                            clear = false;
-//                        }
-//                    }
-//
-//                    if (clear) {
-//                        return t1;
-//                    }
-//                }
-//            }
-//        }
-//        return NULL;
-//    }
-//
-//}
+    if (node->depth != 0) {
+        for (int i = 0; i < 8; i ++) {
+            if (node->children[i] != NULL) {
+                Triangle* curr = FindSeedTriangle(tree, node->children[i], r);
+                if (curr != NULL) {
+                    return curr;
+                }
+            }
+        }
+        return NULL;
+    } else {
+        uint level = tree->max_depth - 1;
+        OcSearch* curr = new OcSearch(tree, 2 * r, level);
+        for (Vertex* x : node->pts) {
+            multimap<double, Vertex*> n2r;
+            curr->get_sorted_neighbors(x->point, &n2r);
+            bool clear = true;
+            for (auto y : n2r) {
+                for (auto z: n2r) {
+                    if (y == z) {
+                        continue;
+                    }
+
+                    if ((!x->compatible(*(y.second), *(z.second))) || (!x->compatible(*(y.second), *(z.second)))) {
+                        continue;
+                    }
+
+                    Triangle* t1 = new Triangle(x, y.second, z.second);
+                    Sphere s1 = t1->construct_ball(r);
+
+                    for (auto m : n2r) {
+                        if (m == y || m == z) {
+                            continue;
+                        }
+                        Vector3D diff = m.second->point - s1.center;
+                        double dist = diff.norm();
+                        if (dist < r) {
+                            clear = false;
+                        }
+                    }
+
+                    if (clear) {
+                        return t1;
+                    }
+                }
+            }
+        }
+        return NULL;
+    }
+
+}
 
 Triangle* FindSeedTriangle(vector<Vertex*> vlist, double r) {
     Triangle* result = NULL;
