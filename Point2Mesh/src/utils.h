@@ -25,5 +25,6 @@ Triangle* FindSeedTriangle(OcTree* tree, OcNode* node, double r);
 
 Triangle* FindSeedTriangle(vector<Vertex*> vlist, double r);
 
+void demo_read();
 
 #endif /* utils_hj_h */

@@ -1,0 +1,260 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS 184: Final Project</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito">
+    </head>
+<body>
+    <nav class="navbar navbar-splash navbar-expand-md" style="background-color: rgb(45, 61, 138);">
+        <div class="container">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <!-- Left Side Of Navbar -->
+                <ul class="navbar-nav mr-auto">
+                    <li>
+                        <p class="course-title">CS 184: Computer Graphics</p>
+                    </li>
+                </ul>
+                <!-- Right Side Of Navbar -->
+                <ul class="navbar-nav ml-auto">
+                    <!-- Authentication Links -->
+                    <li class="nav-item">
+                        <a id="about" class="item-text" href="javascript:void(0)" "="">Final Project</a>
+                    </li>
+                </ul>
+            </div> 
+        </div>
+    </nav>
+    <div class="course-container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>
+                    <strong>Final Project Milestone Report</strong>
+                    : Point-cloud to Mesh</h1>
+                <h3>Name: &nbsp; Star Li | SID: 3033789672 &nbsp; Han Cui | SID: 3033631995</h3>
+            </div>
+        </div>
+        <hr>
+        <div>
+            <h2>Overall Progress</h2>
+            <p>
+                Our project is an algorithm to convert point cloud data into meshes based on <code>Ball-Pivoting Algorithm(BPA)</code>. So far, we have good progress in coding parts.
+            </p>
+            <p>
+                Data preparation and pre-processing are done in the first place. using <kbd>.ply</kbd> files from the <code>Stanford repository</code>, we wrote some python codes to convert them into <kbd>.xyz</kbd> files, a custom format 
+                which contain not only the locations but also the normal directions of the points. To achieve this, we borrow the <code>area-weighted vertex normal</code> method from proj 2 to interpolate the normals. In addition to these 
+                large point-clouds, we also wrote several programs to generate fake point-cloud data of simple geometries (e.g. sphere, cube, etc.) for debugging purpose.
+            </p>
+            <p>
+                Once the data is ready, we began to implement the algorithm from scratch. We started off from basic data structures, such as vertex, edge, triangle, etc.,  
+                and finished some useful helper functions (e.g. circum-sphere construction) along the way. Since our algorithm involves tremendous <code>K-nearest-neighbor</code> queries, 
+                we implemented an accelerating structure, <code>Octree</code> which supports efficient construction and searching. 
+                For the core BPA, we have implemented the function to find the seed triangle, with other supporting functions like compatibility check, sphere construction, and spatial nearest 
+                neighbors from Octree. Furthermore, all of the above functions and structures have been tested on our own on simple 3D geometries.
+            </p>
+            <p>
+                For the overall pipeline, we included some file I/O functions to help working with files in the disk. Also, we get the chance to write the <kbd>CMake</kbd> files ourselves for the very first time 
+                in this course and enable cross-platform development.
+            </p>
+            <br>
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <!-- put the image here.. -->
+                    <img src="https://doc.cgal.org/latest/Poisson_surface_reconstruction_3/introduction.jpg" alt="">
+                </div>
+            </div>
+            <br>
+            <hr>
+            <h2>Project Goals</h2>
+            <p>
+                Back in our <a href="https://listar2000.github.io/Point2Mesh/proposal.html">initial proposal</a>, we set up 3 (potential) goals for our project. While some of them are in good shape right now, some requires some modification 
+                and the details are specified below.
+            </p>
+            <h4>Goal 1: Ball-Pivoting Algorithm</h4>
+            <p>
+                We ended up converting vanilla <kbd>.ply</kbd> file to our custom format without using external packages. For the BPA itself, we went half way through the core codes, and finished data structure constructions, 
+                initiated pipelines like reading files, and included unit-test codes. For the following days, we would finish the BPA with other core 
+                codes as expand triangulation and candidate vertex selection, and other post-processes. 
+            </p>
+            <strong><p style="color: red;">Modifications: </p> </strong><p>None</p>
+
+            <h4>Goal 2: Integrate with MeshEdit and Experiments</h4>
+            <p>
+                We started with some experiments that benchmark our speed, and we would also add methods to measure the precision of our reconstruction. 
+                For the MeshiEdit, we would like to find a way to let it render .ply files, and maybe also .xyz files if needed.
+            </p>
+            <strong><p style="color: red;">Modifications: </p> </strong><p>None</p>
+
+            <h4>Goal 3: Advanced Surface Reconstruction</h4>
+            <p>
+                (This part is considered "tentative" for us due to the intense schedule in the summer course. We will prioritize working in the first two tasks and begin this one once the above are finished)
+            </p>
+            <p>
+                As mentioned in the proposal, we feel strongly motivated to implement the <code>Poisson Reconstruction Surface (PSR)</code>, however, due to the fast pace and shorter pierid of final project, 
+                we might only have a decent chance to do it.
+            </p>
+            <strong><p style="color: red;">Modifications: </p></strong>
+            <ul>
+                <li><p>
+                    Maybe we cannot have time to implement this method ourselves.
+                </p></li>
+                <li><p>
+                    If the above holds, we will try to look for open-sourced code online of PSR, and instead directly compare the results of these two methods.
+                </p></li>
+            </ul>
+            <hr>
+
+            <h2>Schedule</h2>
+            <ul>
+                <li>
+                   <h4>Week 1 (8.1 - 8.7):</h4> 
+                   <ul>
+                       <li>
+                           <p>Set up the project folder with capability to work with point cloud files. <b style="color: green;">(Finished)</b></p>
+                       </li>
+                       <li><p>
+                            Implement a functional BPA algorithm. <b style="color: red;">(2/3 Finished)</b>
+                       </p></li>
+                       <li><p>
+                            Finish Milestone Report. <b style="color: green;">(Finished)</b>
+                       </p></li>
+                   </ul>
+                </li>
+
+                <li>
+                    <h4>Week 2 (8.8 - 8.14):</h4> 
+                    <ul>
+                        <li>
+                            <p>Integrate the BPA algorithm into a complete pipeline that converts point-cloud input to mesh outputs.
+                                <b style="color: blue;">(Started)</b>
+                            </p>
+                        </li>
+                        <li><p>
+                            Evaluate the algorithm’s performance by comparing with the original meshes. <b style="color: blue;">(Started)</b>
+                        </p></li>
+                        <li><p>
+                            Try to implement the Poisson model (if we have time).
+                        </p></li>
+                        <li><p>
+                            Present final report and presentation.
+                        </p></li>
+                    </ul>
+                 </li>
+            </ul>
+            <hr>
+            <h2>Additional Resources</h2>
+            <p>In addition to those listed in the proposal, we find the following resources useful as well this week</p>
+            <ul>
+                <li><p>An Analysis and Implementation of a Parallel Ball Pivoting
+                    Algorithm <a href="http://www.ipol.im/pub/art/2014/81/article.pdf">http://www.ipol.im/pub/art/2014/81/article.pdf</a></p></li>
+            </ul>
+            <br>
+            <hr>
+            <p class="text-center text-md-left">Made with ❤ with Bootstrap,
+                by Star Li (listar2000@berkeley.edu)
+            </p>
+        </div>
+    </div>
+
+
+<style>
+    body {
+        font-family: 'Nunito', sans-serif;
+    }
+
+    .container {
+        max-width: 100%;
+    }
+
+    .navbar-splash {
+        background-color: #30404D;
+        position: relative;
+        margin-bottom: 20px;
+        padding: 10px 0;
+        width: 100%;
+        transition: 100ms;
+        z-index: 5;
+    }
+
+    .nav-item {
+        display: inline-block;
+        padding: 8px 18px;
+        background-color: transparent;
+    }
+
+    .nav-item:hover {
+        opacity: 0.8;
+    }
+
+    .item-text {
+        color: white;
+        margin: 0 3px;
+    }
+
+    .item-text:hover {
+        text-decoration: none;
+        color: white;
+    }
+
+    .course-title {
+        color: white;
+        font-size: larger;
+        margin: 0 3px;
+        padding-left: 10px;
+    }
+
+    .course-container {
+        width: 70%;
+        margin: 0 auto;
+        position: relative;
+        text-align: justify;
+    }
+
+    .icon-image {
+        margin: -40px auto;
+        display: block;
+    }
+
+    .img-center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50%;
+    }
+
+    h1 {
+        font-size: 30px;
+        line-height: 140%;
+        font-weight: bold;
+    }
+
+    h2 {
+        font-size: 27px;
+        line-height: 140%;
+    }
+
+    h3 {
+        font-size: 20px;
+        line-height: 140%;
+    }
+
+    h4 {
+        margin-top: 20px;
+        font-size: 19px;
+        font-weight: bold;
+        line-height: 140%;
+    }
+
+    p {
+        font-size: 18px;
+    }
+
+    code {
+        font-size: 18px;
+    }
+</style>
+</body></html>

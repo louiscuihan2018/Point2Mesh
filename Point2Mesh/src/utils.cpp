@@ -18,6 +18,25 @@
 #include "ocsearch.h"
 using namespace CGL;
 
+void demo_read() {
+    std::string line;
+    std::ifstream rfile;
+    rfile.open("../Point2Mesh/bun_zipper.xyz");
+    int i = 0;
+    if (rfile.is_open()) {
+        while (i < 20) {
+            double a, b, c;
+            rfile >> a;
+            rfile >> b;
+            rfile >> c;
+            cout << a << b << c << endl;
+            i++;
+        }
+        rfile.close();
+    }
+    
+}
+
 pair<Triangle*, bool> check_and_initialize_tri(Vertex* a, Vertex* b, Vertex* c) {
     Vertex v1 = *a;
     Vertex v2 = *b;
@@ -36,15 +55,18 @@ pair<Triangle*, bool> check_and_initialize_tri(Vertex* a, Vertex* b, Vertex* c) 
 pair< vector<Vector3D>,vector<Vertex> > read_and_range(string name) {
     // name of file change here
     // need to be in the target or working folder
-    ifstream file(name);
-    uint v_number;
-    file >> v_number;
-//    std::cout<< v_number;
-//    std::cout << "Vertex number: " << v_number <<std::endl;
-//    std::cout<< "\n";
-//    vector<Vertex*> vertices;
+    ifstream file;
+    file.open(name);
+    
     vector<Vertex> vertices_t;
     vector<Vector3D> range;
+    
+    if (!file.is_open()) return make_pair(range, vertices_t);
+    
+    uint v_number;
+
+    file >> v_number;
+    
     double minx = HUGE_VAL;
     double miny = HUGE_VAL;
     double minz = HUGE_VAL;
@@ -86,9 +108,7 @@ pair< vector<Vector3D>,vector<Vertex> > read_and_range(string name) {
         
         Vector3D curr_point = Vector3D(x, y, z);
         Vector3D curr_normal = Vector3D(dx, dy, dz);
-        Vertex *curr = new Vertex(curr_point, curr_normal);
-//        vertices.push_back(curr);
-        vertices_t.push_back(*curr);
+        vertices_t.push_back(Vertex(curr_point, curr_normal));
     }
     Vector3D min = Vector3D(minx, miny, minz);
     Vector3D max = Vector3D(maxx, maxy, maxz);
@@ -96,6 +116,8 @@ pair< vector<Vector3D>,vector<Vertex> > read_and_range(string name) {
     range.push_back(max);
     
     pair< vector<Vector3D>, vector<Vertex> > result = make_pair(range, vertices_t);
+    file.close();
+
     return result;
 }
 

@@ -119,11 +119,18 @@ namespace testing {
         typedef std::chrono::high_resolution_clock Clock;
         // test of read time
 //        auto t1 = Clock::now();
+#ifdef _WIN32
+        string name = "../Point2Mesh/bun_zipper.xyz";
+#else 
         string name = "bun_zipper.xyz";
+#endif
         pair< vector<Vector3D>, vector<Vertex> > res = read_and_range(name);
 //        auto t2 = Clock::now();
 //               std::cout << "Time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count() / 1000000<< " milliseconds" << std::endl;
         
+        cout << res.second.size() << endl;
+        cout << res.second[res.second.size() - 1].point << endl;
+
         vector<Vertex> vertices = res.second;
         Vector3D min = res.first[0];
         Vector3D max = res.first[1];

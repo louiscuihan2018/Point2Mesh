@@ -22,4 +22,5 @@ int main(int argc, const char * argv[]) {
 //    testing::seed_tri_test();
 //    testing::seed_tri_test();
     testing::read_range_test();
+    //demo_read();
 }
