@@ -33,18 +33,17 @@ pair<Triangle*, bool> check_and_initialize_tri(Vertex* a, Vertex* b, Vertex* c) 
     }
 }
 
-vector<Vector3D> read_and_range(string name) {
+pair< vector<Vector3D>,vector<Vertex> > read_and_range(string name) {
     // name of file change here
     // need to be in the target or working folder
-    typedef std::chrono::high_resolution_clock Clock;
-    auto t1 = Clock::now();
     ifstream file(name);
     uint v_number;
     file >> v_number;
-    std::cout<< v_number;
-    std::cout<< "\n";
-    std::cout<< "\n";
-    vector<Vertex*> vertices;
+//    std::cout<< v_number;
+//    std::cout << "Vertex number: " << v_number <<std::endl;
+//    std::cout<< "\n";
+//    vector<Vertex*> vertices;
+    vector<Vertex> vertices_t;
     vector<Vector3D> range;
     double minx = HUGE_VAL;
     double miny = HUGE_VAL;
@@ -88,77 +87,77 @@ vector<Vector3D> read_and_range(string name) {
         Vector3D curr_point = Vector3D(x, y, z);
         Vector3D curr_normal = Vector3D(dx, dy, dz);
         Vertex *curr = new Vertex(curr_point, curr_normal);
-        vertices.push_back(curr);
-//        std::cout<< curr_normal.x;
-//        std::cout<< "\n";
+//        vertices.push_back(curr);
+        vertices_t.push_back(*curr);
     }
     Vector3D min = Vector3D(minx, miny, minz);
     Vector3D max = Vector3D(maxx, maxy, maxz);
     range.push_back(min);
     range.push_back(max);
     
-    auto t2 = Clock::now();
-    std::cout << "Time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count() / 1000000<< " milliseconds" << std::endl;
-    return range;
+    pair< vector<Vector3D>, vector<Vertex> > result = make_pair(range, vertices_t);
+    return result;
 }
 
-//Triangle* FindSeedTriangle(OcTree* tree, double r) {
+Triangle* FindSeedTriangle(OcTree* tree, double r) {
+    Triangle* result = NULL;
+    result = FindSeedTriangle(tree, tree->root, r);
+    return result;
+}
+
+Triangle* FindSeedTriangle(OcTree* tree, OcNode* node, double r) {
 //    Triangle* result = NULL;
-//    result = FindSeedTriangle(tree, tree->root, r);
-//    return result;
-//}
-//
-//Triangle* FindSeedTriangle(OcTree* tree, OcNode* node, double r) {
-////    Triangle* result = NULL;
-//    if (node->depth != 0) {
-//        for (int i = 0; i < 8; i ++) {
-//            if (node->children[i] != NULL) {
-//                Triangle* curr = FindSeedTriangle(tree, node->children[i], r);
-//                if (curr != NULL) {
-//                    return curr;
-//                }
-//            }
-//        }
-//        return NULL;
-//    } else {
-//        OcSearch* curr = new OcSearch(tree, 2 * r, 1);
-//        for (Vertex* x : node->pts) {
-//            map<double, Vertex*> n2r = curr->get_sorted_neighbors(x->point, 2 * r);
-//            bool clear = true;
-//            for (auto y : n2r) {
-//                for (auto z: n2r) {
-//                    if (y == z) {
-//                        continue;
-//                    }
-//
-//                    if ((!x->compatible(*(y.second), *(z.second))) || (!x->compatible(*(y.second), *(z.second)))) {
-//                        continue;
-//                    }
-//
-//                    Triangle* t1 = new Triangle(x, y.second, z.second);
-//                    Sphere s1 = t1->construct_ball(r);
-//
-//                    for (auto m : n2r) {
-//                        if (m == y || m == z) {
-//                            continue;
-//                        }
-//                        Vector3D diff = m.second->point - s1.center;
-//                        double dist = diff.norm();
-//                        if (dist < r) {
-//                            clear = false;
-//                        }
-//                    }
-//
-//                    if (clear) {
-//                        return t1;
-//                    }
-//                }
-//            }
-//        }
-//        return NULL;
-//    }
-//
-//}
+    if (node->depth != 0) {
+        for (int i = 0; i < 8; i ++) {
+            if (node->children[i] != NULL) {
+                Triangle* curr = FindSeedTriangle(tree, node->children[i], r);
+                if (curr != NULL) {
+                    return curr;
+                }
+            }
+        }
+        return NULL;
+    } else {
+        uint level = tree->max_depth - 1;
+        OcSearch* curr = new OcSearch(tree, 2 * r, level);
+        for (Vertex* x : node->pts) {
+            multimap<double, Vertex*> n2r;
+            curr->get_sorted_neighbors(x->point, &n2r);
+            bool clear = true;
+            for (auto y : n2r) {
+                for (auto z: n2r) {
+                    if (y == z) {
+                        continue;
+                    }
+
+                    if ((!x->compatible(*(y.second), *(z.second))) || (!x->compatible(*(y.second), *(z.second)))) {
+                        continue;
+                    }
+
+                    Triangle* t1 = new Triangle(x, y.second, z.second);
+                    Sphere s1 = t1->construct_ball(r);
+
+                    for (auto m : n2r) {
+                        if (m == y || m == z) {
+                            continue;
+                        }
+                        Vector3D diff = m.second->point - s1.center;
+                        double dist = diff.norm();
+                        if (dist < r) {
+                            clear = false;
+                        }
+                    }
+
+                    if (clear) {
+                        return t1;
+                    }
+                }
+            }
+        }
+        return NULL;
+    }
+
+}
 
 Triangle* FindSeedTriangle(vector<Vertex*> vlist, double r) {
     Triangle* result = NULL;

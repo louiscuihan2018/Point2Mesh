@@ -116,39 +116,84 @@ namespace testing {
 
     void read_range_test() {
         //remember to set folder and make sure the file is within the folder with correct format;
+        typedef std::chrono::high_resolution_clock Clock;
+        // test of read time
+//        auto t1 = Clock::now();
         string name = "bun_zipper.xyz";
-        vector<Vector3D> range = read_and_range(name);
-        std::cout << range[0].y;
-        std::cout << "\n";
-        std::cout << range[0].x;
-        std::cout << "\n";
+        pair< vector<Vector3D>, vector<Vertex> > res = read_and_range(name);
+//        auto t2 = Clock::now();
+//               std::cout << "Time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count() / 1000000<< " milliseconds" << std::endl;
+        
+        vector<Vertex> vertices = res.second;
+        Vector3D min = res.first[0];
+        Vector3D max = res.first[1];
+        
+        // test of construct time
+//        auto t1 = Clock::now();
+        Vector3D o = min;
+        Vector3D sz = max - min;
+        uint dep = 6;
+        OcTree tree = OcTree(o, sz, dep);
+        tree.populate_tree(vertices.begin(), vertices.end());
+//        auto t2 = Clock::now();
+//               std::cout << "Time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count() / 1000000<< " milliseconds" << std::endl;
+
+        // test of search time
+        auto t1 = Clock::now();
+        Vector3D a = Vector3D(0,0,0);
+        OcSearch s = OcSearch(&tree, 0.0003, dep - 1);
+        Neighbor_map curr;
+        s.get_sorted_neighbors(a, &curr);
+        
+        auto t2 = Clock::now();
+        std::cout << "Time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count() / 1000000<< " milliseconds" << std::endl;
     }
 
     void seed_tri_test() {
-        Vector3D x_pos = Vector3D(1, 0, 0);
-        Vector3D y_pos_1 = Vector3D(0, -1, 0);
-        Vector3D y_pos_2 = Vector3D(0, 1, 0);
-        Vector3D z_pos = Vector3D(0, 0, 3);
-        Vector3D n = Vector3D(0, 0, 1);
-        Vertex v1 = Vertex(x_pos, n);
-        Vertex v2 = Vertex(y_pos_1, n);
-        Vertex v3 = Vertex(y_pos_2, n);
-        Vertex v4 = Vertex(z_pos, n);
-
-        Vector3D o = Vector3D(0, -1, 0);
-        Vector3D s = Vector3D(1, 2, 3);
-
-        OcTree tree = OcTree(o, s, 1);
-
-    }
-
-    void seed_tri_test_simple() {
+        
+        // test of octree build and then search for seed triangle based on the tree
+        
+        // construct position and normal vectors for vertices
         Vector3D x_pos = Vector3D(1, 0, 0);
         Vector3D y_pos_1 = Vector3D(0, -1, 0);
         Vector3D y_pos_2 = Vector3D(0, 1, 0);
         Vector3D z_pos_1 = Vector3D(0, 0, 3);
         Vector3D z_pos_2 = Vector3D(0, 0, -3);
         Vector3D n = Vector3D(0, 0, 1);
+        
+        //construct vertices and store in a vector
+        Vertex v1 = Vertex(x_pos, n);
+        Vertex v2 = Vertex(y_pos_1, n);
+        Vertex v3 = Vertex(y_pos_2, n);
+        Vertex v4 = Vertex(z_pos_1, n);
+        Vertex v5 = Vertex(z_pos_2, n);
+        vector<Vertex> curr;
+        curr.push_back(v5);
+        curr.push_back(v3);
+        curr.push_back(v4);
+        curr.push_back(v1);
+        curr.push_back(v2);
+        
+        //construct the octree
+        Vector3D o = Vector3D(0, -1, -3);
+        Vector3D s = Vector3D(1, 2, 6);
+
+        OcTree tree = OcTree(o, s, 2);
+        tree.populate_tree(curr.begin(), curr.end());
+        
+        // run find triangle for the tree, to check out the result, use breakpoints to check the vertices of the triangle
+        Triangle* t = FindSeedTriangle(&tree, 1.0);
+    }
+
+    void seed_tri_test_simple() {
+        
+        Vector3D x_pos = Vector3D(1, 0, 0);
+        Vector3D y_pos_1 = Vector3D(0, -1, 0);
+        Vector3D y_pos_2 = Vector3D(0, 1, 0);
+        Vector3D z_pos_1 = Vector3D(0, 0, 3);
+        Vector3D z_pos_2 = Vector3D(0, 0, -3);
+        Vector3D n = Vector3D(0, 0, 1);
+        
         Vertex v1 = Vertex(x_pos, n);
         Vertex v2 = Vertex(y_pos_1, n);
         Vertex v3 = Vertex(y_pos_2, n);
