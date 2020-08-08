@@ -8,6 +8,12 @@ namespace CGL {
         s_tree = NULL;
     }
 
+    OcSearch::OcSearch(OcTree* tree, double radius) {
+        s_tree = tree;
+        s_radius = radius;
+        s_level = calc_level(radius);
+    }
+
     OcSearch::OcSearch(OcTree* tree, double radius, uint level) {
         s_tree = tree;
         s_radius = radius;
@@ -115,7 +121,22 @@ namespace CGL {
         return node;
     }
 
-    uint OcSearch::xloc_left(OcNode* node) const{
+    uint OcSearch::calc_level(double radius) {
+        uint lv = s_tree->root->depth;
+        Vector3D sz = s_tree->root->size / 2.0;
+
+        while (lv != 0) {
+            if (radius < min(min(sz.x, sz.y), sz.z)) {
+                lv--;
+                sz = sz / 2.0;
+            }
+            else return lv;
+        }
+
+        return 0;
+    }
+
+    uint OcSearch::xloc_left(OcNode* node) const {
         return node->locs.x - (uint)pow(2, node->depth);
     }
 

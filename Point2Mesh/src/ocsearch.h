@@ -18,16 +18,18 @@ namespace CGL {
         OcTree* s_tree;
 
         OcSearch();
+        OcSearch(OcTree* tree, double radius);
         OcSearch(OcTree* tree, double radius, uint level);
         ~OcSearch();
 
         // locating methods
         void go_to_level(Vector3D locs, uint lv, OcNode** node);
+        uint get_sorted_neighbors(Vector3D& query, Neighbor_map* neighbors);  
+        uint calc_level(double radius);
+
+    private:
         void go_to_level(uint xloc, uint yloc, uint zloc, uint lv, OcNode** node);
-
         OcNode* find_node_from_point(Vector3D& query);
-
-        uint get_sorted_neighbors(Vector3D& query, Neighbor_map* neighbors);
         void iterate_node(Vector3D& query, OcNode* node, Neighbor_map* neighbors);
 
         uint xloc_left(OcNode* node) const;
