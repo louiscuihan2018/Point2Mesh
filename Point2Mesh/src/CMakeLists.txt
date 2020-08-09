@@ -7,10 +7,13 @@ set(POINT2MESH_SOURCE
     sphere.cpp
     triangle.cpp
     vertex.cpp
+
+    # utils
     utils.cpp
     testing.h
+    clock.cpp
 
-    # Spcae datastructures
+    # Space datastructures
     octree.cpp
     ocnode.cpp
     ocsearch.cpp

@@ -1,6 +1,7 @@
 #include "octree.h"
 #include "ocsearch.h"
 #include "utils.h"
+#include "clock.h"
 #include "meshconvert.h"
 #include <random>
 #include <vector>
@@ -36,6 +37,8 @@ namespace testing {
     //    t.populate_tree(vs.begin(), vs.end());
     //    t.print_node_info(true);
     //}
+
+    Timer t;
 
     void octree_test_basic() {
         cout << "starting..." << endl;
@@ -142,14 +145,14 @@ namespace testing {
         tree.populate_tree(vertices.begin(), vertices.end());
 
         // test of search time
-        auto t1 = Clock::now();
+        t.reset();
+
         Vector3D a = Vector3D(0,0,0);
         OcSearch s = OcSearch(&tree, 0.0003, dep - 1);
         Neighbor_map curr;
         s.get_sorted_neighbors(a, &curr);
         
-        auto t2 = Clock::now();
-        cout << "Time: " << chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count() / 1000000<< " milliseconds" << endl;
+        t.stop();
     }
 
     void seed_tri_test() {
@@ -246,13 +249,12 @@ namespace testing {
     }
 
     void mesher_test() {
-        auto t1 = Clock::now();
+        t.reset();
 
         string name = "../Point2Mesh/bun_zipper.xyz";
         MeshConvert converter(name, 1);
         cout << converter.m_vertices.size() << endl;
 
-        auto t2 = Clock::now();
-        cout << "Time: " << chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count() / 1000000 << " milliseconds" << endl;
+        t.stop();
     }
 }
