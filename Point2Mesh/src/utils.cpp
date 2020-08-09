@@ -389,3 +389,4 @@ Vertex* FindCandidate(Edge* e, OcTree* tree, double r) {
     }
 
     return candidate;
+}

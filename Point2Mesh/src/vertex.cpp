@@ -53,6 +53,6 @@ bool Vertex::compatible(Vertex& v1, Vertex& v2) {
         facenormal = -facenormal;
     }
 
-    return dot(facenormal, v1.normal) > 0 && dot(facenormal, v2.normal) > 0
+    return dot(facenormal, v1.normal) > 0 && dot(facenormal, v2.normal) > 0;
 }
     
