@@ -17,11 +17,13 @@
 using namespace std;
 using namespace CGL;
 
+enum v_type { ORPHAN = 0, FRONT = 1, INNER = 2 };
+
 class Vertex{
     public:
         Vector3D point;
         Vector3D normal;
-        bool is_inner;
+        v_type type;
         Edge_list adjacent_edges;
         Tri_list adjacent_triangles;
         Vertex(){};
@@ -30,6 +32,8 @@ class Vertex{
         void add_triangle(Triangle *triangle);
         bool compatible(Edge &edge);
         bool compatible(Vertex &v1, Vertex &v2);
+        Edge* edgeTo(Vertex& v);
+        void updateType();
 };
 
 #endif /* vertex_h */

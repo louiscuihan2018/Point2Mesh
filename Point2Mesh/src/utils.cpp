@@ -129,11 +129,11 @@ Triangle* FindSeedTriangle(OcTree* tree, OcNode* node, double r) {
         uint level = tree->max_depth - 1;
         OcSearch* curr = new OcSearch(tree, 2 * r, level);
         for (Vertex* x : node->pts) {
-            multimap<double, Vertex*> n2r;
+            Neighbor_map n2r;
             curr->get_sorted_neighbors(x->point, &n2r);
             bool clear = true;
-            for (auto y : n2r) {
-                for (auto z : n2r) {
+            for (auto& y : n2r) {
+                for (auto& z : n2r) {
                     if (y == z) {
                         continue;
                     }
@@ -248,7 +248,7 @@ Vertex* FindCandidate(Edge* e, OcTree* tree, double r) {
             for (auto x : n2r) {
                 Vertex* v = x.second;
 
-                if (v->is_inner || v == e->from() || v == e->to()) {
+                if (v->type == v_type::INNER || v == e->from() || v == e->to()) {
                     continue;
                 }
                 if (!v->compatible(*e)) {
@@ -329,7 +329,7 @@ Vertex* FindCandidate(Edge* e, OcTree* tree, double r) {
             for (auto x : n2r) {
                 Vertex* v = x.second;
 
-                if (v->is_inner || v == e->from() || v == e->to()) {
+                if (v->type == v_type::INNER || v == e->from() || v == e->to()) {
                     continue;
                 }
                 if (!v->compatible(*e)) {

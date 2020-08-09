@@ -18,7 +18,7 @@ using namespace CGL;
 Vertex::Vertex(Vector3D a, Vector3D b) {
     this->point = a;
     this->normal = b;
-    this->is_inner = false;
+    this->type = v_type::ORPHAN;
     this->adjacent_edges.clear();
     this->adjacent_triangles.clear();
 }
@@ -54,5 +54,25 @@ bool Vertex::compatible(Vertex& v1, Vertex& v2) {
     }
 
     return dot(facenormal, v1.normal) > 0 && dot(facenormal, v2.normal) > 0;
+}
+
+Edge* Vertex::edgeTo(Vertex& v) {
+    for (auto e : adjacent_edges) {
+        if (e->a == &v || e->b == &v) return e;
+    }
+    return NULL;
+}
+
+void Vertex::updateType() {
+    if (adjacent_edges.size() == 0) type = v_type::ORPHAN;
+
+    for (auto e : adjacent_edges) {
+        if (e->type != 2) {
+            type = v_type::FRONT;
+            return;
+        }
+    }
+
+    type = v_type::INNER;
 }
     

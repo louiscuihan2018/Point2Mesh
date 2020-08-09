@@ -15,14 +15,16 @@
 #include "types.h"
 
 using namespace std;
+using namespace CGL;
 
 class Edge{
+    enum e_type { BORDER = 0, FRONT = 1, INNER = 2 };
     public:
         Vertex* a;
         Vertex* b;
         Triangle* face1;
         Triangle* face2;
-        bool is_inner;
+        e_type type;
     // future constructors use pointers
         Edge(){};
         Edge(Vertex* a, Vertex* b);

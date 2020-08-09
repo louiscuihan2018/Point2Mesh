@@ -28,12 +28,16 @@ Triangle::Triangle(Vertex* v1, Vertex* v2, Vertex* v3) {
     this->ab = ab;
     this->bc = bc;
     this->ca = ca;
-    this->a->add_triangle(this);
-    this->b->add_triangle(this);
-    this->c->add_triangle(this);
     this->ab->add_triangle(this);
     this->bc->add_triangle(this);
     this->ca->add_triangle(this);
+
+    this->a->add_triangle(this);
+    this->b->add_triangle(this);
+    this->c->add_triangle(this);
+    this->a->updateType();
+    this->b->updateType();
+    this->c->updateType();
 }
 
 Sphere Triangle::construct_ball(double p) {

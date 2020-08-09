@@ -18,6 +18,12 @@ namespace CGL {
         void init_data();
         void init_ocsearch();
 
+        bool findSeedTriangle();
+        bool findSeedTriangle(OcNode* node);
+        bool trySeedVertex(Vertex* v);
+        bool trySeedVertices(Vertex* v, Vertex* u, Vertex* w, Neighbor_map* map);
+        bool emptyBallConfig(Vertex* v, Vertex* u, Vertex* w);
+
         double m_radius;
         uint m_vtx_count;
         uint m_tri_count;

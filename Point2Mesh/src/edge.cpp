@@ -20,7 +20,7 @@ using namespace std;
 Edge::Edge(Vertex* a, Vertex* b) {
     this->a = a;
     this->b = b;
-    this->is_inner = false;
+    this->type = e_type::FRONT;
     this->a->add_edge(this);
     this->b->add_edge(this);
     this->face1 = NULL;
@@ -31,11 +31,12 @@ bool Edge::add_triangle(Triangle* triangle) {
 
     if (this->face1 == NULL) {
         this->face1 = triangle;
+        this->type = e_type::FRONT;
         update_edge();
     }
     else if (this->face2 == NULL) {
         this->face2 = triangle;
-        this->is_inner = true;
+        this->type = e_type::INNER;
     }
     else {
         cout<< "Already two triangles" <<endl;
