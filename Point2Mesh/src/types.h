@@ -5,10 +5,10 @@
 //  Created by louis on 8/5/20.
 //  Copyright © 2020 louis. All rights reserved.
 //
-//#define uint unsigned int
 #ifndef types_h
 #define types_h
 #include <map>
+#include <vector>
 
 class Vertex;
 class Edge;

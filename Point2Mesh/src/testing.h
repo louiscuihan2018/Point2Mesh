@@ -1,6 +1,7 @@
 #include "octree.h"
 #include "ocsearch.h"
 #include "utils.h"
+#include "meshconvert.h"
 #include <random>
 #include <vector>
 
@@ -116,34 +117,29 @@ namespace testing {
 
     void read_range_test() {
         //remember to set folder and make sure the file is within the folder with correct format;
-        typedef std::chrono::high_resolution_clock Clock;
-        // test of read time
-//        auto t1 = Clock::now();
+
 #ifdef _WIN32
         string name = "../Point2Mesh/bun_zipper.xyz";
 #else 
         string name = "bun_zipper.xyz";
 #endif
-        pair< vector<Vector3D>, vector<Vertex> > res = read_and_range(name);
-//        auto t2 = Clock::now();
-//               std::cout << "Time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count() / 1000000<< " milliseconds" << std::endl;
+
+        vector<Vector3D> v1; vector<Vertex> v2;
+        pair< vector<Vector3D>&, vector<Vertex>& > res(v1, v2);
+        uint n_vertex = read_and_range(name, &res);
         
-        cout << res.second.size() << endl;
-        cout << res.second[res.second.size() - 1].point << endl;
+        cout << n_vertex << endl;
 
         vector<Vertex> vertices = res.second;
         Vector3D min = res.first[0];
         Vector3D max = res.first[1];
         
         // test of construct time
-//        auto t1 = Clock::now();
         Vector3D o = min;
         Vector3D sz = max - min;
         uint dep = 6;
         OcTree tree = OcTree(o, sz, dep);
         tree.populate_tree(vertices.begin(), vertices.end());
-//        auto t2 = Clock::now();
-//               std::cout << "Time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count() / 1000000<< " milliseconds" << std::endl;
 
         // test of search time
         auto t1 = Clock::now();
@@ -153,7 +149,7 @@ namespace testing {
         s.get_sorted_neighbors(a, &curr);
         
         auto t2 = Clock::now();
-        std::cout << "Time: " << std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count() / 1000000<< " milliseconds" << std::endl;
+        cout << "Time: " << chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count() / 1000000<< " milliseconds" << endl;
     }
 
     void seed_tri_test() {
@@ -247,5 +243,16 @@ namespace testing {
         }
         //for (pair<double, Vertex*> p : m)
         //    cout << p.first << " " << p.second->point << endl;
+    }
+
+    void mesher_test() {
+        auto t1 = Clock::now();
+
+        string name = "../Point2Mesh/bun_zipper.xyz";
+        MeshConvert converter(name, 1);
+        cout << converter.m_vertices.size() << endl;
+
+        auto t2 = Clock::now();
+        cout << "Time: " << chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count() / 1000000 << " milliseconds" << endl;
     }
 }

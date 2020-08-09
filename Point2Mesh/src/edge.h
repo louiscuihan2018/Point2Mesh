@@ -27,9 +27,9 @@ class Edge{
     // future constructors use pointers
         Edge(){};
         Edge(Vertex* a, Vertex* b);
-        void add_triangle(Triangle *triangle);
-        Vertex* geta();
-        Vertex* getb();
+        bool add_triangle(Triangle *triangle);
+        Vertex* from() const;
+        Vertex* to() const;
         
 };
 #endif /* edge_h */

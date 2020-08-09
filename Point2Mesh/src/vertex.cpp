@@ -32,8 +32,8 @@ void Vertex::add_triangle(Triangle* triangle) {
 }
 
 bool Vertex::compatible(Edge& e) {
-    Vertex ev1 = *(e.geta());
-    Vertex ev2 = *(e.getb());
+    Vertex ev1 = *(e.from());
+    Vertex ev2 = *(e.to());
     
     Vector3D curr_point = this->point;
     Vector3D a_pos = ev1.point;

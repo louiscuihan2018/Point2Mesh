@@ -17,6 +17,7 @@ set(POINT2MESH_SOURCE
 
     # Application
     main.cpp
+    meshconvert.cpp
  )
 
 # Windows-only sources

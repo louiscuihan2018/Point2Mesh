@@ -25,23 +25,25 @@ Edge::Edge(Vertex* a, Vertex* b) {
     this->face1 = NULL;
     this->face2 = NULL;
 }
-void Edge::add_triangle(Triangle* triangle) {
+bool Edge::add_triangle(Triangle* triangle) {
     if (this->face1 == NULL) {
         this->face1 = triangle;
     }
     else if (this->face2 == NULL) {
         this->face2 = triangle;
+        this->is_inner = true;
     }
     else {
         cout<< "Already two triangles" <<endl;
+        return false;
     }
+    return true;
 }
 
-Vertex* Edge::geta() {
+Vertex* Edge::from() const {
     return this->a;
 }
 
-Vertex* Edge::getb() {
+Vertex* Edge::to() const {
     return this->b;
 }
-

@@ -18,25 +18,6 @@
 #include "ocsearch.h"
 using namespace CGL;
 
-void demo_read() {
-    std::string line;
-    std::ifstream rfile;
-    rfile.open("../Point2Mesh/bun_zipper.xyz");
-    int i = 0;
-    if (rfile.is_open()) {
-        while (i < 20) {
-            double a, b, c;
-            rfile >> a;
-            rfile >> b;
-            rfile >> c;
-            cout << a << b << c << endl;
-            i++;
-        }
-        rfile.close();
-    }
-    
-}
-
 pair<Triangle*, bool> check_and_initialize_tri(Vertex* a, Vertex* b, Vertex* c) {
     Vertex v1 = *a;
     Vertex v2 = *b;
@@ -52,16 +33,19 @@ pair<Triangle*, bool> check_and_initialize_tri(Vertex* a, Vertex* b, Vertex* c) 
     }
 }
 
-pair< vector<Vector3D>,vector<Vertex> > read_and_range(string name) {
+uint read_and_range(string name, pair< vector<Vector3D>&, vector<Vertex>& >* data) {
     // name of file change here
     // need to be in the target or working folder
     ifstream file;
     file.open(name);
     
-    vector<Vertex> vertices_t;
-    vector<Vector3D> range;
+    vector<Vertex>& vertices_t = data->second;
+    vector<Vector3D>& range = data->first;
     
-    if (!file.is_open()) return make_pair(range, vertices_t);
+    if (!file.is_open()) {
+        cout << "cannot read data file " << name << " successfully" << endl;
+        return 0;
+    }
     
     uint v_number;
 
@@ -108,17 +92,17 @@ pair< vector<Vector3D>,vector<Vertex> > read_and_range(string name) {
         
         Vector3D curr_point = Vector3D(x, y, z);
         Vector3D curr_normal = Vector3D(dx, dy, dz);
-        vertices_t.push_back(Vertex(curr_point, curr_normal));
+        vertices_t.emplace_back(curr_point, curr_normal);
     }
+
     Vector3D min = Vector3D(minx, miny, minz);
     Vector3D max = Vector3D(maxx, maxy, maxz);
     range.push_back(min);
     range.push_back(max);
     
-    pair< vector<Vector3D>, vector<Vertex> > result = make_pair(range, vertices_t);
     file.close();
 
-    return result;
+    return v_number;
 }
 
 Triangle* FindSeedTriangle(OcTree* tree, double r) {
