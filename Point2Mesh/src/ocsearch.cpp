@@ -27,6 +27,11 @@ namespace CGL {
         }
     }
 
+    uint OcSearch::get_sorted_neighbors(Vector3D& query, Neighbor_map* neighbors, double radius) {
+        set_radius(radius);
+        return get_sorted_neighbors(query, neighbors);
+    }
+
     uint OcSearch::get_sorted_neighbors(Vector3D& query, Neighbor_map* neighbors) {
         OcNode* q_node = find_node_from_point(query);
         double radius = s_radius;
@@ -134,6 +139,11 @@ namespace CGL {
         }
 
         return 0;
+    }
+
+    void OcSearch::set_radius(double new_radius) {
+        s_radius = new_radius;
+        s_level = calc_level(new_radius);
     }
 
     uint OcSearch::xloc_left(OcNode* node) const {

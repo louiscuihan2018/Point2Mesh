@@ -16,6 +16,7 @@ namespace CGL {
         MeshConvert(string file, double radius);
 
         void init_data();
+        void init_ocsearch();
 
         double m_radius;
         uint m_vtx_count;
@@ -23,12 +24,15 @@ namespace CGL {
         string m_filename;
 
         OcSearch m_ocsearch;
+        OcTree m_tree;
+
         vector<Vertex> m_vertices;
         vector<Triangle> m_triangles;
         vector<Edge> m_front_edges;
         vector<Edge> m_border_edges;
 
         vector<Vector3D> m_range; 
+
     };
 }
 

@@ -12,8 +12,7 @@
 #include <vector>
 #include "CGL/CGL.h"
 #include "CGL/vector3D.h"
-#include "vertex.h"
-//#include "triangle.h"
+#include "types.h"
 
 using namespace std;
 
@@ -31,5 +30,6 @@ class Edge{
         Vertex* from() const;
         Vertex* to() const;
         
+        void update_edge();
 };
 #endif /* edge_h */

@@ -24,8 +24,11 @@ namespace CGL {
 
         // locating methods
         void go_to_level(Vector3D locs, uint lv, OcNode** node);
+        uint get_sorted_neighbors(Vector3D& query, Neighbor_map* neighbors, double radius);
         uint get_sorted_neighbors(Vector3D& query, Neighbor_map* neighbors);  
         uint calc_level(double radius);
+
+        void set_radius(double new_radius);
 
     private:
         void go_to_level(uint xloc, uint yloc, uint zloc, uint lv, OcNode** node);
