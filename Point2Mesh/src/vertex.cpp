@@ -32,30 +32,10 @@ void Vertex::add_triangle(Triangle* triangle) {
 }
 
 bool Vertex::compatible(Edge& e) {
-    Vertex ev1 = *(e.from());
-    Vertex ev2 = *(e.to());
-    
-    Vector3D curr_point = this->point;
-    Vector3D a_pos = ev1.point;
-    Vector3D b_pos = ev2.point;
-    
-    Vector3D v1 = a_pos - curr_point;
-    Vector3D v2 = b_pos - curr_point;
-    
-    Vector3D facenormal = cross(v1, v2);
-    facenormal.normalize();
-    
-    Vector3D vn1 = this->normal;
-    Vector3D vn2 = ev1.normal;
-    Vector3D vn3 = ev2.normal;
-    
-    bool check_1 = (dot(facenormal, vn1) > 0);
-    bool check_2 = (dot(facenormal, vn2) > 0);
-    bool check_3 = (dot(facenormal, vn3) > 0);
-    
-    return check_1 && check_2 && check_3;
+    return this->compatible(*(e.geta()), *(e.getb())) || this->compatible(*(e.getb()), *(e.geta()));
     
 }
+
 
 bool Vertex::compatible(Vertex& v1, Vertex& v2) {
     Vector3D a_pos = this->point;

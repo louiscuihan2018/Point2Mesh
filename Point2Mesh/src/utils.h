@@ -33,4 +33,6 @@ Triangle* FindSeedTriangle(OcTree* tree, OcNode* node, double r);
 
 Triangle* FindSeedTriangle(vector<Vertex*> vlist, double r);
 
+Vertex* FindCandidate(Edge* e, OcTree* tree, double r);
+
 #endif /* utils_hj_h */

@@ -136,7 +136,7 @@ Triangle* FindSeedTriangle(OcTree* tree, OcNode* node, double r) {
                         continue;
                     }
 
-                    if ((!x->compatible(*(y.second), *(z.second))) || (!x->compatible(*(y.second), *(z.second)))) {
+                    if ((!x->compatible(*(y.second), *(z.second))) || (!x->compatible(*(z.second), *(y.second)))) {
                         continue;
                     }
 
@@ -189,7 +189,7 @@ Triangle* FindSeedTriangle(vector<Vertex*> vlist, double r) {
                     continue;
                 }
                 
-                if ((!x->compatible(*(i), *(j))) || (!x->compatible(*(i), *(j)))) {
+                if ((!x->compatible(*(i), *(j))) || (!x->compatible(*(j), *(i)))) {
                     continue;
                 }
                 
@@ -218,3 +218,172 @@ Triangle* FindSeedTriangle(vector<Vertex*> vlist, double r) {
     }
     
 }
+
+Vertex* FindCandidate(Edge* e, OcTree* tree, double r) {
+ Vertex* candidate = NULL;
+ double min_theta = 2.0 * M_PI;
+ Triangle* t1 = e->face1;
+ Triangle* t2 = e->face2;
+ if (t1 != NULL) {
+     Sphere s = t1->construct_ball(r);
+     Vector3D c = s.center;
+     Vector3D v1 = e->geta()->point;
+     Vector3D v2= e->getb()->point;
+     Vector3D m = (v1 + v2) / 2.0;
+     bool check = (c.x != c.x || c.y != c.y || c.z != c.z);
+     if (!check) {
+         double r_n = (m - c).norm() + r;
+         uint level = tree->max_depth - 1;
+         
+         OcSearch* curr_1 = new OcSearch(tree, r_n, level);
+         multimap<double, Vertex*> nrn;
+         curr_1->get_sorted_neighbors(m, &nrn);
+         
+         OcSearch* curr_2 = new OcSearch(tree, 2 * r, level);
+         multimap<double, Vertex*> n2r;
+         curr_2->get_sorted_neighbors(m, &n2r);
+         
+         for (auto x : n2r) {
+             Vertex* v = x.second;
+             
+             if (v->is_inner || v == e->geta() || v == e->getb()) {
+                 continue;
+             }
+             if (!v->compatible(*e)) {
+                 continue;
+             }
+             if (v == t1->a || v == t1->b || v == t1->c) {
+                 continue;
+             }
+             
+             Triangle* t_curr = new Triangle(e->geta(), e->getb(), v);
+             Sphere s_curr = t_curr->construct_ball(r);
+             Vector3D c_new = s_curr.center;
+             bool check_twice = (c_new.x != c_new.x || c_new.y != c_new.y || c_new.z != c_new.z);
+             
+             if (check_twice) {
+                 continue;
+             }
+             
+             Vector3D vec1 = c_new - m;
+             vec1.normalize();
+             Vector3D vec2 = c - m;
+             vec2.normalize();
+             double cosine = dot(vec1, vec2);
+             double theta = acos(cosine);
+             
+             Vector3D cro = cross(vec2, vec1);
+             Vector3D edg = e->getb()->point - e->geta()->point;
+             if (dot(cro, edg) < 0) {
+                 theta = 2.0 * M_PI - theta;
+             }
+             if (theta > min_theta) {
+                 continue;
+             }
+             bool clear = true;
+             for (auto y: nrn) {
+                 if (y == x) {
+                     continue;
+                 }
+                 Vertex* c = y.second;
+                 if (c == e->geta() || c == e->getb()) {
+                     continue;
+                 }
+                 Vector3D diff = y.second->point - c_new;
+                 double dist = diff.norm();
+                 if (dist < r) {
+                     clear = false;
+                 }
+                 
+             }
+             
+             if (clear) {
+                 candidate = v;
+                 min_theta = theta;
+             }
+         }
+     }
+ }
+ 
+if (t2 != NULL) {
+     Sphere s = t2->construct_ball(r);
+     Vector3D c = s.center;
+     Vector3D v1 = e->geta()->point;
+     Vector3D v2= e->getb()->point;
+     Vector3D m = (v1 + v2) / 2.0;
+     bool check = (c.x != c.x || c.y != c.y || c.z != c.z);
+     if (!check) {
+         double r_n = (m - c).norm() + r;
+         uint level = tree->max_depth - 1;
+         
+         OcSearch* curr_1 = new OcSearch(tree, r_n, level);
+         multimap<double, Vertex*> nrn;
+         curr_1->get_sorted_neighbors(m, &nrn);
+         
+         OcSearch* curr_2 = new OcSearch(tree, 2 * r, level);
+         multimap<double, Vertex*> n2r;
+         curr_2->get_sorted_neighbors(m, &n2r);
+         
+         for (auto x : n2r) {
+             Vertex* v = x.second;
+             
+             if (v->is_inner || v == e->geta() || v == e->getb()) {
+                 continue;
+             }
+             if (!v->compatible(*e)) {
+                 continue;
+             }
+             if (v == t1->a || v == t1->b || v == t1->c) {
+                 continue;
+             }
+             
+             Triangle* t_curr = new Triangle(e->geta(), e->getb(), v);
+             Sphere s_curr = t_curr->construct_ball(r);
+             Vector3D c_new = s_curr.center;
+             bool check_twice = (c_new.x != c_new.x || c_new.y != c_new.y || c_new.z != c_new.z);
+             
+             if (check_twice) {
+                 continue;
+             }
+             
+             Vector3D vec1 = c_new - m;
+             vec1.normalize();
+             Vector3D vec2 = c - m;
+             vec2.normalize();
+             double cosine = dot(vec1, vec2);
+             double theta = acos(cosine);
+             
+             Vector3D cro = cross(vec2, vec1);
+             Vector3D edg = e->getb()->point - e->geta()->point;
+             if (dot(cro, edg) < 0) {
+                 theta = 2.0 * M_PI - theta;
+             }
+             if (theta > min_theta) {
+                 continue;
+             }
+             bool clear = true;
+             for (auto y: nrn) {
+                 if (y == x) {
+                     continue;
+                 }
+                 Vertex* c = y.second;
+                 if (c == e->geta() || c == e->getb()) {
+                     continue;
+                 }
+                 Vector3D diff = y.second->point - c_new;
+                 double dist = diff.norm();
+                 if (dist < r) {
+                     clear = false;
+                 }
+                 
+             }
+             
+             if (clear) {
+                 candidate = v;
+                 min_theta = theta;
+             }
+         }
+     }
+ }
+ 
+ return candidate;
