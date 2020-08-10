@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <vector>
 #include "vertex.h"
+#include "triangle.h"
 #include "edge.h"
 #include "CGL/CGL.h"
 #include "CGL/vector3D.h"
@@ -74,5 +75,36 @@ void Vertex::updateType() {
     }
 
     type = v_type::INNER;
+}
+
+Vertex* Vertex::post_Helper(Vertex* v) {
+    Edge* e = edgeTo(*v);
+    Triangle* t = e->face1;
+    for (Edge* curr_e : adjacent_edges) {
+        if (curr_e->type != BORDER) {
+            continue;
+        }
+        Vertex* curr_vs = curr_e->from();
+        
+        if (curr_vs == this) {
+            continue;
+        }
+        if (curr_vs == t->a || curr_vs == t->b || curr_vs == t->c) {
+            continue;
+        }
+        Edge* e_ad = curr_vs->edgeTo(*v);
+        
+        if (e_ad == NULL) {
+            continue;
+        }
+        
+        if (e_ad->type != BORDER) {
+            continue;
+        }
+        if (e_ad->from() == v) {
+            return v;
+        }
+    }
+    return NULL;
 }
     

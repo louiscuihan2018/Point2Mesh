@@ -34,6 +34,7 @@ class Vertex{
         bool compatible(Vertex &v1, Vertex &v2);
         Edge* edgeTo(Vertex& v);
         void updateType();
+        Vertex* post_Helper(Vertex* v);
 };
 
 #endif /* vertex_h */
