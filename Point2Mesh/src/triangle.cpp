@@ -22,12 +22,25 @@ Triangle::Triangle(Vertex* v1, Vertex* v2, Vertex* v3) {
     this->a = v1;
     this->b = v2;
     this->c = v3;
-    Edge *ab = new Edge(v1, v2);
-    Edge *bc = new Edge(v2, v3);
-    Edge *ca = new Edge(v3, v1);
-    this->ab = ab;
-    this->bc = bc;
-    this->ca = ca;
+    
+    if (v1->edgeTo(*v2) == NULL) {
+        Edge *ab = new Edge(v1, v2);
+    } else {
+        Edge *ab = v1->edgeTo(*v2);
+    }
+    
+    if (v2->edgeTo(*v3) == NULL) {
+        Edge *bc = new Edge(v2, v3);
+    } else {
+        Edge *bc = v2->edgeTo(*v3);
+    }
+    
+    if (v3->edgeTo(*v1) == NULL) {
+        Edge *ca = new Edge(v3, v1);
+    } else {
+        Edge *ca = v3->edgeTo(*v1);
+    }
+    
     this->ab->add_triangle(this);
     this->bc->add_triangle(this);
     this->ca->add_triangle(this);

@@ -95,6 +95,11 @@ namespace CGL {
 
             if (cand != NULL) {
                 //TODO
+                Edge* e1 = v->edgeTo(*cand);
+                Edge* e2 = u->edgeTo(*cand);
+                Edge* e3 = v->edgeTo(*u);
+                
+                
             }
 
             it++;
@@ -108,6 +113,91 @@ namespace CGL {
 
     bool MeshConvert::emptyBallConfig(Vertex* v, Vertex* u, Vertex* w) {
         //TODO
+        
         return false;
     }
+    
+    Vertex* MeshConvert::FindCandidate(Edge* e) {
+        Vertex* candidate = NULL;
+        double min_theta = 2.0 * M_PI;
+        Vertex* v_source = e->from();
+        Vertex* v_target = e->to();
+        
+        Vector3D m = v_source->point + v_target->point / 2.0;
+        
+        double r_n = m_radius + (m - v_source->point).norm();
+        
+        Neighbor_map nrn;
+        m_ocsearch.set_radius(r_n);
+        m_ocsearch.get_sorted_neighbors(m, &nrn);
+        m_ocsearch.set_radius(m_radius);
+        
+        Triangle* t1 = e->face1;
+        Sphere s1 = t1->construct_ball(m_radius);
+        Vector3D c = s1.center;
+        
+        Vector3D edg = v_target->point - v_source->point;
+        Vector3D mc = m - c;
+        
+        for (auto x = nrn.begin(); x != nrn.end(); x ++) {
+            Vertex* v = x->second;
+            
+            if ((v == t1->a) || (v == t1->b) || (v == t1->c)) {
+                continue;
+            }
+            
+            Triangle t2 = Triangle(v_source, v_source, v);
+            Sphere s2 = t1->construct_ball(m_radius);
+            Vector3D c_n = s2.center;
+            
+            if ((c_n.x != c_n.x || c_n.y != c_n.y || c_n.z != c_n.z)) {
+                continue;
+            }
+            
+            Vector3D mc_n = c_n - m;
+            mc.normalize();
+            mc_n.normalize();
+            
+            double cosine = dot(mc, mc_n);
+            double theta = acos(cosine);
+            Vector3D cro = cross(mc, mc_n);
+            edg.normalize();
+            
+            if (dot(cro, edg) < 0) {
+                theta = 2 * M_PI - theta;
+            }
+            
+            if (theta > min_theta) {
+                continue;
+            }
+            bool clear = true;
+            for (auto x : nrn) {
+                Vertex* curr = x.second;
+                if ((curr == v_source) || (curr == v_target) || (curr == v)) {
+                    continue;
+                }
+                Vector3D diff = curr->point - c_n;
+                double dist = diff.norm();
+                
+                if (dist < m_radius) {
+                    clear = false;
+                }
+            }
+            
+            if (clear) {
+                candidate = v;
+                min_theta = theta;
+            }
+            
+        }
+        
+        return candidate;
+        
+    }
+
+    void MeshConvert::expandTriangulation() {
+        while (! m_front_edges.empty()) {
+        }
+    }
+    
 }

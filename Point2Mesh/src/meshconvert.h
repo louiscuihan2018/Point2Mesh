@@ -23,6 +23,8 @@ namespace CGL {
         bool trySeedVertex(Vertex* v);
         bool trySeedVertices(Vertex* v, Vertex* u, Vertex* w, Neighbor_map* map);
         bool emptyBallConfig(Vertex* v, Vertex* u, Vertex* w);
+        Vertex* FindCandidate(Edge* e);
+        void expandTriangulation();
 
         double m_radius;
         uint m_vtx_count;
@@ -32,10 +34,10 @@ namespace CGL {
         OcSearch m_ocsearch;
         OcTree m_tree;
 
-        vector<Vertex> m_vertices;
-        vector<Triangle> m_triangles;
-        vector<Edge> m_front_edges;
-        vector<Edge> m_border_edges;
+        list<Vertex> m_vertices;
+        list<Triangle> m_triangles;
+        list<Edge> m_front_edges;
+        list<Edge> m_border_edges;
 
         vector<Vector3D> m_range; 
 
