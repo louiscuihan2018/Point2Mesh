@@ -31,7 +31,6 @@ namespace CGL {
 
         // construct octree from data read in init_data
         m_tree.populate_tree(m_vertices.begin(), m_vertices.end());
-
         m_ocsearch = OcSearch(&m_tree, 2 * m_radius);
     }
 
@@ -109,15 +108,31 @@ namespace CGL {
                 // * create the triangle and add it to this class member
                 Triangle* tri = new Triangle(v, u, cand);
                 m_triangles.push_back(tri);
+
+                e1 = v->edgeTo(*cand);
+                e2 = u->edgeTo(*cand);
+                e3 = v->edgeTo(*u);
+
+                if (e1->type == e_type::E_FRONT) m_front_edges.push_front(e1);
+                if (e2->type == e_type::E_FRONT) m_front_edges.push_front(e2);
+                if (e3->type == e_type::E_FRONT) m_front_edges.push_front(e3);
+
+                if (m_front_edges.size() > 0) return true;
             }
 
             it++;
         }
+        return false;
     }
 
     bool MeshConvert::trySeedVertices(Vertex* v, Vertex* u, Vertex* w, Neighbor_map* map) {
         if (!v->compatible(*u, *w)) return false;
-        //TODO
+        Edge* e1 = v->edgeTo(*w);
+        Edge* e2 = u->edgeTo(*w);
+        if ((e1 != NULL && e1->type == e_type::E_INNER) ||
+            (e2 != NULL && e2->type == e_type::E_INNER)) return false;
+
+
     }
 
     bool MeshConvert::emptyBallConfig(Vertex* v, Vertex* u, Vertex* w) {
