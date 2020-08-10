@@ -17,8 +17,8 @@
 using namespace std;
 using namespace CGL;
 
+enum e_type { BORDER = 0, E_FRONT = 1, E_INNER = 2 };
 class Edge{
-    enum e_type { BORDER = 0, FRONT = 1, INNER = 2 };
     public:
         Vertex* a;
         Vertex* b;

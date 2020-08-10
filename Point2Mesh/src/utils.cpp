@@ -93,7 +93,8 @@ uint read_and_range(string name, pair< vector<Vector3D>&, vector<Vertex>& >* dat
 
         Vector3D curr_point = Vector3D(x, y, z);
         Vector3D curr_normal = Vector3D(dx, dy, dz);
-        vertices_t.emplace_back(curr_point, curr_normal);
+        Vertex c = Vertex(curr_point, curr_normal);
+        vertices_t.push_back(c);
     }
 
     Vector3D min = Vector3D(minx, miny, minz);

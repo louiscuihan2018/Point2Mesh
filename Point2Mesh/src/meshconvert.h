@@ -34,7 +34,7 @@ namespace CGL {
         OcSearch m_ocsearch;
         OcTree m_tree;
 
-        list<Vertex> m_vertices;
+        vector<Vertex> m_vertices;
         list<Triangle> m_triangles;
         list<Edge> m_front_edges;
         list<Edge> m_border_edges;
