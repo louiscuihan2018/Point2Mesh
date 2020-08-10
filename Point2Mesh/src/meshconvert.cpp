@@ -1,6 +1,7 @@
 #include "meshconvert.h"
 #include "utils.h"
 
+
 using namespace std;
 
 namespace CGL {
@@ -197,6 +198,60 @@ namespace CGL {
 
     void MeshConvert::expandTriangulation() {
         while (! m_front_edges.empty()) {
+            Edge e = m_front_edges.front();
+            m_front_edges.pop_front();
+
+            if (e.type == E_FRONT|| e.type == E_INNER) {
+                continue;
+            }
+            
+            Vertex* v = FindCandidate(&e);
+            
+            if (v == NULL) {
+                e.type = BORDER;
+                m_border_edges.push_front(e);
+                continue;
+            }
+            if ((v->type == INNER) || (!v->compatible(e))) {
+                e.type = BORDER;
+                m_border_edges.push_front(e);
+                continue;
+            }
+            
+            Vertex* vs =  e.from();
+            Vertex* vt = e.to();
+            Edge* e_s = v->edgeTo(*vs);
+            Edge* e_t = v->edgeTo(*vt);
+            
+            if (e_s != NULL || e_t != NULL) {
+                e.type = BORDER;
+                m_border_edges.push_front(e);
+                continue;
+            }
+            if (e_s->type != E_FRONT || e_t->type != E_FRONT) {
+                e.type = BORDER;
+                m_border_edges.push_front(e);
+                continue;
+            }
+            
+            Triangle t = Triangle(e.from(), e.b, v);
+            m_triangles.push_front(t);
+            e_s = v->edgeTo(*vs);
+            e_t = v->edgeTo(*vt);
+            
+            if (e_s->face1 != NULL && e_s->face2 != NULL) {
+                e_s->type = E_INNER;
+            } else {
+                m_front_edges.push_front(*e_s);
+            }
+            
+            if (e_t->face1 != NULL && e_t->face2 != NULL) {
+                e_t->type = E_INNER;
+            } else {
+                m_front_edges.push_front(*e_t);
+            }
+            
+            
         }
     }
     
