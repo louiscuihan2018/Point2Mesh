@@ -25,6 +25,7 @@ namespace CGL {
         bool emptyBallConfig(Vertex* v, Vertex* u, Vertex* w);
         Vertex* FindCandidate(Edge* e);
         void expandTriangulation();
+        void postProcess();
 
         double m_radius;
         uint m_vtx_count;

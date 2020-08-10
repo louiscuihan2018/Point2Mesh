@@ -254,5 +254,27 @@ namespace CGL {
             
         }
     }
+
+    void MeshConvert::postProcess() {
+        for (Edge x : m_border_edges) {
+            
+            if (x.type != BORDER) {
+                m_border_edges.remove(x);
+                continue;
+            }
+            
+            Vertex* vs = x.from();
+            Vertex* vt = x.to();
+            
+            Vertex* target = vs->post_Helper(vt);
+            
+            if (target != NULL) {
+                m_border_edges.remove(x);
+                Triangle t = Triangle(vs, vt, target);
+                m_triangles.push_back(t);
+            }
+            
+        }
+    }
     
 }
