@@ -228,11 +228,14 @@ namespace testing {
         Vector3D og(-1, -1, -1);
         Vector3D sz(12, 12, 2);
 
-        OcTree t(og, sz, 2);
+        OcTree t(og, sz, 4);
         t.populate_tree(vss.begin(), vss.end());
         t.print_node_info(true);
 
-        OcSearch s(&t, 1, 0);
+        OcSearch s(&t, 5);
+
+        cout << "calculated level: " << s.s_level << endl;
+
         Vector3D query(2, 3, 0);
 
         Neighbor_map m;
