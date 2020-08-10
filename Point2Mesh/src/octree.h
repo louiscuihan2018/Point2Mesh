@@ -32,7 +32,7 @@ namespace CGL {
         Vector3D origin;
 
         // class methods
-        void populate_tree(vector<Vertex>::iterator start, vector<Vertex>::iterator end);
+        void populate_tree(vector<Vertex*>::iterator start, vector<Vertex*>::iterator end);
 
         // debugging helpers
         void print_node_info(bool verbose);

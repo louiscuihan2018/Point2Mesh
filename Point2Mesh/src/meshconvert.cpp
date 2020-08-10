@@ -15,7 +15,7 @@ namespace CGL {
     }
 
     void MeshConvert::init_data() {
-        pair< vector<Vector3D>&, vector<Vertex>& > data(m_range, m_vertices);
+        pair< vector<Vector3D>&, vector<Vertex*>& > data(m_range, m_vertices);
         m_vtx_count = read_and_range(m_filename, &data);
     }
 
