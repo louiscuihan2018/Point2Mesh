@@ -34,13 +34,13 @@ pair<Triangle*, bool> check_and_initialize_tri(Vertex* a, Vertex* b, Vertex* c) 
     }
 }
 
-uint read_and_range(string name, pair< vector<Vector3D>&, vector<Vertex>& >* data) {
+uint read_and_range(string name, pair< vector<Vector3D>&, vector<Vertex*>& >* data) {
     // name of file change here
     // need to be in the target or working folder
     ifstream file;
     file.open(name);
 
-    vector<Vertex>& vertices_t = data->second;
+    vector<Vertex*>& vertices_t = data->second;
     vector<Vector3D>& range = data->first;
 
     if (!file.is_open()) {
@@ -93,7 +93,7 @@ uint read_and_range(string name, pair< vector<Vector3D>&, vector<Vertex>& >* dat
 
         Vector3D curr_point = Vector3D(x, y, z);
         Vector3D curr_normal = Vector3D(dx, dy, dz);
-        Vertex c = Vertex(curr_point, curr_normal);
+        Vertex* c = new Vertex(curr_point, curr_normal);
         vertices_t.push_back(c);
     }
 

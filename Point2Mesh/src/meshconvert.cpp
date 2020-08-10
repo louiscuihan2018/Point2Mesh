@@ -95,12 +95,20 @@ namespace CGL {
             }
 
             if (cand != NULL) {
-                //TODO
                 Edge* e1 = v->edgeTo(*cand);
                 Edge* e2 = u->edgeTo(*cand);
                 Edge* e3 = v->edgeTo(*u);
                 
-                
+                if ((e1 != NULL && e1->type != e_type::E_FRONT) ||
+                    (e2 != NULL && e2->type != e_type::E_FRONT) ||
+                    (e3 != NULL && e3->type != e_type::E_FRONT)) {
+                    it++;
+                    continue;
+                }
+
+                // * create the triangle and add it to this class member
+                Triangle* tri = new Triangle(v, u, cand);
+                m_triangles.push_back(tri);
             }
 
             it++;
@@ -250,8 +258,6 @@ namespace CGL {
             } else {
                 m_front_edges.push_front(*e_t);
             }
-            
-            
         }
     }
 

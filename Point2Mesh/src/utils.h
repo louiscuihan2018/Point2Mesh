@@ -25,7 +25,7 @@ pair<Triangle*, bool> check_and_initialize_tri(Vertex* a, Vertex* b, Vertex* c);
 * @param data -> the container which will hold the data read from method
 * @return number of data points
 */
-uint read_and_range(string name, pair< vector<Vector3D>&, vector<Vertex>& >* data);
+uint read_and_range(string name, pair< vector<Vector3D>&, vector<Vertex*>& >* data);
 
 Triangle* FindSeedTriangle(OcTree* tree, double r);
 

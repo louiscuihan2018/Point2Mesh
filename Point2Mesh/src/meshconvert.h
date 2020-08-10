@@ -36,9 +36,9 @@ namespace CGL {
         OcTree m_tree;
 
         vector<Vertex> m_vertices;
-        list<Triangle> m_triangles;
-        list<Edge> m_front_edges;
-        list<Edge> m_border_edges;
+        list<Triangle*> m_triangles;
+        list<Edge*> m_front_edges;
+        list<Edge*> m_border_edges;
 
         vector<Vector3D> m_range; 
 

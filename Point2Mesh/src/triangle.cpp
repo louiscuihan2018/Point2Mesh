@@ -23,23 +23,17 @@ Triangle::Triangle(Vertex* v1, Vertex* v2, Vertex* v3) {
     this->b = v2;
     this->c = v3;
     
-    if (v1->edgeTo(*v2) == NULL) {
-        Edge *ab = new Edge(v1, v2);
-    } else {
-        Edge *ab = v1->edgeTo(*v2);
-    }
+    Edge* ab = v1->edgeTo(*v2);
+    if (ab == NULL)
+        ab = new Edge(v1, v2);
     
-    if (v2->edgeTo(*v3) == NULL) {
-        Edge *bc = new Edge(v2, v3);
-    } else {
-        Edge *bc = v2->edgeTo(*v3);
-    }
+    Edge* bc = v2->edgeTo(*v3);
+    if (bc == NULL)
+        bc = new Edge(v2, v3);
     
-    if (v3->edgeTo(*v1) == NULL) {
-        Edge *ca = new Edge(v3, v1);
-    } else {
-        Edge *ca = v3->edgeTo(*v1);
-    }
+    Edge* ca = v3->edgeTo(*v1);
+    if (ca == NULL) 
+        ca = new Edge(v3, v1);
     
     this->ab->add_triangle(this);
     this->bc->add_triangle(this);
