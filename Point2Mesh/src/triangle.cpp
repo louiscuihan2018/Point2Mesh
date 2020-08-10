@@ -47,36 +47,3 @@ Triangle::Triangle(Vertex* v1, Vertex* v2, Vertex* v3) {
     this->c->updateType();
 }
 
-bool Triangle::construct_ball(double p, Sphere& s) {
-    
-    Vector3D a = this->a->point;
-    Vector3D b = this->b->point;
-    Vector3D c = this->c->point;
-    Vector3D ac = c - a;
-    Vector3D ab = b - a;
-    Vector3D abXac = cross(ab, ac);
-    Vector3D acXab = cross(ac, ab);
-    Vector3D curr = ac.norm2() * (cross(abXac, ab)) + ab.norm2() * (cross(acXab, ac));
-    curr = curr / (2.0 * abXac.norm2());
-    Vector3D circumcenter = a + curr;
-    
-    double dist = curr.norm();
-    
-//        Vector3D diff_1 = circumcenter - a;
-//        double dist_1 = diff.norm();
-//        Vector3D diff_2 = circumcenter - b;
-//        double dist_2 = diff.norm();
-//        Vector3D diff_3 = circumcenter - c;
-//        double dist_3 = diff.norm();
-    
-    if (p < dist) return false;
-
-    double adjustment = sqrt(p * p - dist * dist);
-    abXac.normalize();
-    Vector3D facenormal = abXac;
-    Vector3D center = circumcenter -abXac *adjustment;
-    
-    s = Sphere(center, p);
-    return true;
-}
-

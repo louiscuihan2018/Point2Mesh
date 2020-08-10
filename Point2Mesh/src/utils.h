@@ -35,4 +35,29 @@ Triangle* FindSeedTriangle(vector<Vertex*> vlist, double r);
 
 Vertex* FindCandidate(Edge* e, OcTree* tree, double r);
 
+bool construct_ball(Vertex* v1, Vertex* v2, Vertex* v3, double p, Sphere& s) {
+    Vector3D& a = v1->point;
+    Vector3D& b = v2->point;
+    Vector3D& c = v3->point;
+    Vector3D ac = c - a;
+    Vector3D ab = b - a;
+    Vector3D abXac = cross(ab, ac);
+    Vector3D acXab = cross(ac, ab);
+    Vector3D curr = ac.norm2() * (cross(abXac, ab)) + ab.norm2() * (cross(acXab, ac));
+    curr = curr / (2.0 * abXac.norm2());
+    Vector3D circumcenter = a + curr;
+
+    double dist = curr.norm();
+
+    if (p < dist) return false;
+
+    double adjustment = sqrt(p * p - dist * dist);
+    abXac.normalize();
+    Vector3D facenormal = abXac;
+    Vector3D center = circumcenter - abXac * adjustment;
+
+    s = Sphere(center, p);
+    return true;
+}
+
 #endif /* utils_hj_h */

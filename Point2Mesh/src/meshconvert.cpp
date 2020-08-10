@@ -132,7 +132,9 @@ namespace CGL {
         if ((e1 != NULL && e1->type == e_type::E_INNER) ||
             (e2 != NULL && e2->type == e_type::E_INNER)) return false;
 
-
+        Sphere s;
+        if (!construct_ball(v, u, w, m_radius, s)) return false;
+        return true;
     }
 
     bool MeshConvert::emptyBallConfig(Vertex* v, Vertex* u, Vertex* w) {

@@ -28,6 +28,5 @@ class Triangle{
         Edge* ca;
         Triangle(){};
         Triangle(Vertex* v1, Vertex* v2, Vertex* v3);
-        bool construct_ball(double p, Sphere& s);
 };
 #endif /* triangle_h */
