@@ -17,6 +17,7 @@ namespace CGL {
     void MeshConvert::init_data() {
         pair< vector<Vector3D>&, vector<Vertex*>& > data(m_range, m_vertices);
         m_vtx_count = read_and_range(m_filename, &data);
+        cout << "init data" << endl;
     }
 
     void MeshConvert::init_ocsearch() {
@@ -26,7 +27,10 @@ namespace CGL {
         Vector3D size = 1.2 * (box_max - box_min);
         Vector3D origin = box_min - margin;
 
-        uint tree_depth = (uint)(log(m_vtx_count) / log(8));
+        uint tree_depth = (uint)(log(m_vtx_count) / log(8)) + 1;
+
+        cout << box_min << " " << box_max << endl;
+        cout << origin << " " << size << " " << tree_depth << endl;
         m_tree = new OcTree(origin, size, tree_depth);
 
         // construct octree from data read in init_data
