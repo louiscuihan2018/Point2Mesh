@@ -25,14 +25,15 @@ namespace CGL {
         Vertex* FindCandidate(Edge* e);
         void expandTriangulation();
         void postProcess();
+        void construct();
 
         double m_radius;
         uint m_vtx_count;
         uint m_tri_count;
         string m_filename;
 
-        OcSearch m_ocsearch;
-        OcTree m_tree;
+        OcSearch* m_ocsearch;
+        OcTree* m_tree;
 
         vector<Vertex*> m_vertices;
         list<Triangle*> m_triangles;

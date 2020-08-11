@@ -251,15 +251,15 @@ namespace testing {
 //        //    cout << p.first << " " << p.second->point << endl;
 //    }
 //
-//    void mesher_test() {
+    void mesher_test() {
 //        t.reset();
-//
-//        string name = "../Point2Mesh/bun_zipper.xyz";
-//        MeshConvert converter(name, 1);
-//        cout << converter.m_vertices.size() << endl;
-//
+
+        string name = "../Point2Mesh/bun_zipper.xyz";
+        MeshConvert converter(name, 1);
+        cout << converter.m_vertices.size() << endl;
+
 //        t.stop();
-//    }
+    }
 //
 //    void find_candidate_test() {
 //           Vector3D x_pos = Vector3D(1, 0, 0);

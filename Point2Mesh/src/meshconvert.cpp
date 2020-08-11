@@ -27,15 +27,15 @@ namespace CGL {
         Vector3D origin = box_min - margin;
 
         uint tree_depth = (uint)(log(m_vtx_count) / log(8));
-        m_tree = OcTree(origin, size, tree_depth);
+        m_tree = new OcTree(origin, size, tree_depth);
 
         // construct octree from data read in init_data
-        m_tree.populate_tree(m_vertices.begin(), m_vertices.end());
-        m_ocsearch = OcSearch(&m_tree, 2 * m_radius);
+        m_tree->populate_tree(m_vertices.begin(), m_vertices.end());
+        m_ocsearch = new OcSearch(m_tree, 2 * m_radius);
     }
 
     bool MeshConvert::findSeedTriangle() {
-        OcNode* start = m_tree.root;
+        OcNode* start = m_tree->root;
         return findSeedTriangle(start);
     }
 
@@ -61,8 +61,8 @@ namespace CGL {
 
     bool MeshConvert::trySeedVertex(Vertex* v) {
         Neighbor_map n2r;
-        m_ocsearch.set_radius(2 * m_radius);
-        m_ocsearch.get_sorted_neighbors(v->point, &n2r);
+        m_ocsearch->set_radius(2 * m_radius);
+        m_ocsearch->get_sorted_neighbors(v->point, &n2r);
 
         Neighbor_iter it = n2r.begin();
 
@@ -155,9 +155,9 @@ namespace CGL {
         double r_n = m_radius + (m - v_source->point).norm();
         
         Neighbor_map nrn;
-        m_ocsearch.set_radius(r_n);
-        m_ocsearch.get_sorted_neighbors(m, &nrn);
-        m_ocsearch.set_radius(m_radius);
+        m_ocsearch->set_radius(r_n);
+        m_ocsearch->get_sorted_neighbors(m, &nrn);
+        m_ocsearch->set_radius(m_radius);
         
         Triangle* t1 = e->face1;
         Sphere s1;
@@ -223,10 +223,10 @@ namespace CGL {
 
     void MeshConvert::expandTriangulation() {
         while (! m_front_edges.empty()) {
-            Edge* e = m_border_edges.front();
+            Edge* e = m_front_edges.front();
             m_front_edges.pop_front();
 
-            if (e->type == E_FRONT|| e->type == E_INNER) {
+            if (e->type == BORDER|| e->type == E_INNER) {
                 continue;
             }
             
@@ -298,6 +298,22 @@ namespace CGL {
             }
             
         }
+    }
+
+    void MeshConvert::construct() {
+        if (m_front_edges.empty()) {
+            bool found = findSeedTriangle();
+            if (!found) {
+                std::cout<< "no seed";
+            }
+            expandTriangulation();
+            postProcess();
+        }
+        else {
+            expandTriangulation();
+            postProcess();
+        }
+        
     }
     
 }
