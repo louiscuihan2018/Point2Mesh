@@ -252,13 +252,13 @@ namespace testing {
 //    }
 //
     void mesher_test() {
-        t.reset();
+//        t.reset();
 
         string name = "../Point2Mesh/bun_zipper.xyz";
         MeshConvert converter(name, 1);
         cout << converter.m_vertices.size() << endl;
 
-        t.stop();
+//        t.stop();
     }
 //
 //    void find_candidate_test() {
