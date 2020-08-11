@@ -154,7 +154,7 @@ namespace CGL {
         Vertex* v_source = e->from();
         Vertex* v_target = e->to();
         
-        Vector3D m = v_source->point + v_target->point / 2.0;
+        Vector3D m = (v_source->point + v_target->point) / 2.0;
         
         double r_n = m_radius + (m - v_source->point).norm();
         
@@ -311,12 +311,14 @@ namespace CGL {
                 std::cout<< "no seed";
             }
             expandTriangulation();
-            postProcess();
         }
         else {
             expandTriangulation();
-            postProcess();
         }
+        while (findSeedTriangle()) {
+            expandTriangulation();
+        }
+        postProcess();
         
     }
     

@@ -38,7 +38,7 @@ namespace testing {
 //    //    t.print_node_info(true);
 //    //}
 //
-      Timer t;
+//    Timer t;
 //
 //    void octree_test_basic() {
 //        cout << "starting..." << endl;
