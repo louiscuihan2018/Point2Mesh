@@ -143,8 +143,11 @@ Triangle* FindSeedTriangle(OcTree* tree, OcNode* node, double r) {
                         continue;
                     }
 
-                    Triangle* t1 = new Triangle(x, y.second, z.second);
-                    Sphere s1 = t1->construct_ball(r);
+                    Sphere s1;
+                    Triangle* t1 = NULL;
+                    if (construct_ball(x, y.second, z.second, r, s1)){
+                        t1 = new Triangle(x, y.second, z.second);
+                    }
 
                     for (auto m : n2r) {
                         if (m == y || m == z) {
@@ -196,9 +199,11 @@ Triangle* FindSeedTriangle(vector<Vertex*> vlist, double r) {
                     continue;
                 }
 
-                Triangle* t1 = new Triangle(x, i, j);
-                Sphere s1 = t1->construct_ball(r);
-
+                Sphere s1;
+                Triangle* t1 = NULL;
+                if (construct_ball(x, i, j,r, s1)){
+                    t1 = new Triangle(x,i,j);
+                }
                 for (Vertex* k : curr_list) {
                     if (k == i || k == j) {
                         continue;
@@ -222,13 +227,39 @@ Triangle* FindSeedTriangle(vector<Vertex*> vlist, double r) {
 
 }
 
+bool construct_ball(Vertex* v1, Vertex* v2, Vertex* v3, double p, Sphere& s) {
+    Vector3D& a = v1->point;
+    Vector3D& b = v2->point;
+    Vector3D& c = v3->point;
+    Vector3D ac = c - a;
+    Vector3D ab = b - a;
+    Vector3D abXac = cross(ab, ac);
+    Vector3D acXab = cross(ac, ab);
+    Vector3D curr = ac.norm2() * (cross(abXac, ab)) + ab.norm2() * (cross(acXab, ac));
+    curr = curr / (2.0 * abXac.norm2());
+    Vector3D circumcenter = a + curr;
+
+    double dist = curr.norm();
+
+    if (p < dist) return false;
+
+    double adjustment = sqrt(p * p - dist * dist);
+    abXac.normalize();
+    Vector3D facenormal = abXac;
+    Vector3D center = circumcenter - abXac * adjustment;
+
+    s = Sphere(center, p);
+    return true;
+}
+
 Vertex* FindCandidate(Edge* e, OcTree* tree, double r) {
     Vertex* candidate = NULL;
     double min_theta = 2.0 * M_PI;
     Triangle* t1 = e->face1;
     Triangle* t2 = e->face2;
     if (t1 != NULL) {
-        Sphere s = t1->construct_ball(r);
+        Sphere s;
+        construct_ball(t1->a, t1->b, t1->c, r, s);
         Vector3D c = s.center;
         Vector3D v1 = e->from()->point;
         Vector3D v2 = e->to()->point;
@@ -259,14 +290,11 @@ Vertex* FindCandidate(Edge* e, OcTree* tree, double r) {
                     continue;
                 }
 
-                Triangle* t_curr = new Triangle(e->from(), e->to(), v);
-                Sphere s_curr = t_curr->construct_ball(r);
-                Vector3D c_new = s_curr.center;
-                bool check_twice = (c_new.x != c_new.x || c_new.y != c_new.y || c_new.z != c_new.z);
-
-                if (check_twice) {
+                Sphere s_curr;
+                if (!(construct_ball(e->from(), e->to(), v, r, s_curr))){
                     continue;
                 }
+                Vector3D c_new = s_curr.center;
 
                 Vector3D vec1 = c_new - m;
                 vec1.normalize();
@@ -309,7 +337,8 @@ Vertex* FindCandidate(Edge* e, OcTree* tree, double r) {
     }
 
     if (t2 != NULL) {
-        Sphere s = t2->construct_ball(r);
+        Sphere s;
+        construct_ball(t2->a, t2->b, t2->c, r, s);
         Vector3D c = s.center;
         Vector3D v1 = e->from()->point;
         Vector3D v2 = e->to()->point;
@@ -340,14 +369,11 @@ Vertex* FindCandidate(Edge* e, OcTree* tree, double r) {
                     continue;
                 }
 
-                Triangle* t_curr = new Triangle(e->from(), e->to(), v);
-                Sphere s_curr = t_curr->construct_ball(r);
-                Vector3D c_new = s_curr.center;
-                bool check_twice = (c_new.x != c_new.x || c_new.y != c_new.y || c_new.z != c_new.z);
-
-                if (check_twice) {
+                Sphere s_curr;
+                if (!(construct_ball(e->from(), e->to(), v, r, s_curr))){
                     continue;
                 }
+                Vector3D c_new = s_curr.center;
 
                 Vector3D vec1 = c_new - m;
                 vec1.normalize();
@@ -390,4 +416,5 @@ Vertex* FindCandidate(Edge* e, OcTree* tree, double r) {
     }
 
     return candidate;
+
 }

@@ -159,7 +159,8 @@ namespace CGL {
         m_ocsearch.set_radius(m_radius);
         
         Triangle* t1 = e->face1;
-        Sphere s1 = t1->construct_ball(m_radius);
+        Sphere s1;
+        construct_ball(t1->a, t1->b, t1->c, m_radius, s1);
         Vector3D c = s1.center;
         
         Vector3D edg = v_target->point - v_source->point;
@@ -172,13 +173,11 @@ namespace CGL {
                 continue;
             }
             
-            Triangle t2 = Triangle(v_source, v_source, v);
-            Sphere s2 = t1->construct_ball(m_radius);
-            Vector3D c_n = s2.center;
-            
-            if ((c_n.x != c_n.x || c_n.y != c_n.y || c_n.z != c_n.z)) {
+            Sphere s2;
+            if (!construct_ball(v_source, v_target, v, m_radius, s2)) {
                 continue;
             }
+            Vector3D c_n = s2.center;
             
             Vector3D mc_n = c_n - m;
             mc.normalize();
@@ -223,43 +222,43 @@ namespace CGL {
 
     void MeshConvert::expandTriangulation() {
         while (! m_front_edges.empty()) {
-            Edge e = m_front_edges.front();
+            Edge* e = m_border_edges.front();
             m_front_edges.pop_front();
 
-            if (e.type == E_FRONT|| e.type == E_INNER) {
+            if (e->type == E_FRONT|| e->type == E_INNER) {
                 continue;
             }
             
-            Vertex* v = FindCandidate(&e);
+            Vertex* v = FindCandidate(e);
             
             if (v == NULL) {
-                e.type = BORDER;
+                e->type = BORDER;
                 m_border_edges.push_front(e);
                 continue;
             }
-            if ((v->type == INNER) || (!v->compatible(e))) {
-                e.type = BORDER;
+            if ((v->type == INNER) || (!v->compatible(*e))) {
+                e->type = BORDER;
                 m_border_edges.push_front(e);
                 continue;
             }
             
-            Vertex* vs =  e.from();
-            Vertex* vt = e.to();
+            Vertex* vs =  e->from();
+            Vertex* vt = e->to();
             Edge* e_s = v->edgeTo(*vs);
             Edge* e_t = v->edgeTo(*vt);
             
-            if (e_s != NULL || e_t != NULL) {
-                e.type = BORDER;
+            if (e_s != NULL && e_s->type != E_FRONT) {
+                e->type = BORDER;
                 m_border_edges.push_front(e);
                 continue;
             }
-            if (e_s->type != E_FRONT || e_t->type != E_FRONT) {
-                e.type = BORDER;
+            if (e_t != NULL && e_t->type != E_FRONT) {
+                e->type = BORDER;
                 m_border_edges.push_front(e);
                 continue;
             }
             
-            Triangle t = Triangle(e.from(), e.b, v);
+            Triangle* t = new Triangle(e->from(), e->to(), v);
             m_triangles.push_front(t);
             e_s = v->edgeTo(*vs);
             e_t = v->edgeTo(*vt);
@@ -267,33 +266,33 @@ namespace CGL {
             if (e_s->face1 != NULL && e_s->face2 != NULL) {
                 e_s->type = E_INNER;
             } else {
-                m_front_edges.push_front(*e_s);
+                m_front_edges.push_front(e_s);
             }
             
             if (e_t->face1 != NULL && e_t->face2 != NULL) {
                 e_t->type = E_INNER;
             } else {
-                m_front_edges.push_front(*e_t);
+                m_front_edges.push_front(e_t);
             }
         }
     }
 
     void MeshConvert::postProcess() {
-        for (Edge x : m_border_edges) {
+        for (Edge* x : m_border_edges) {
             
-            if (x.type != BORDER) {
+            if (x->type != BORDER) {
                 m_border_edges.remove(x);
                 continue;
             }
             
-            Vertex* vs = x.from();
-            Vertex* vt = x.to();
+            Vertex* vs = x->from();
+            Vertex* vt = x->to();
             
             Vertex* target = vs->post_Helper(vt);
             
             if (target != NULL) {
                 m_border_edges.remove(x);
-                Triangle t = Triangle(vs, vt, target);
+                Triangle* t = new Triangle(vs, vt, target);
                 m_triangles.push_back(t);
             }
             
