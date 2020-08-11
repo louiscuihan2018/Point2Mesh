@@ -22,7 +22,6 @@ namespace CGL {
         bool findSeedTriangle(OcNode* node);
         bool trySeedVertex(Vertex* v);
         bool trySeedVertices(Vertex* v, Vertex* u, Vertex* w, Neighbor_map* map);
-        bool emptyBallConfig(Vertex* v, Vertex* u, Vertex* w);
         Vertex* FindCandidate(Edge* e);
         void expandTriangulation();
         void postProcess();

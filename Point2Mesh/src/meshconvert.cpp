@@ -134,15 +134,16 @@ namespace CGL {
 
         Sphere s;
         if (!construct_ball(v, u, w, m_radius, s)) return false;
+
+        double r2 = m_radius * m_radius;
+
+        for (Neighbor_iter it = map->begin(); it != map->end(); it++) {
+            double dist = (s.center - (*it).second->point).norm2();
+            if (dist < r2) return false;
+        }
         return true;
     }
 
-    bool MeshConvert::emptyBallConfig(Vertex* v, Vertex* u, Vertex* w) {
-        //TODO
-        
-        return false;
-    }
-    
     Vertex* MeshConvert::FindCandidate(Edge* e) {
         Vertex* candidate = NULL;
         double min_theta = 2.0 * M_PI;
