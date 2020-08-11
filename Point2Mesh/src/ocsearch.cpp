@@ -22,7 +22,7 @@ namespace CGL {
 
     OcSearch::~OcSearch() {
         if (s_tree != NULL) {
-//            delete s_tree;
+            //delete s_tree;
             s_tree = NULL;
         }
     }
