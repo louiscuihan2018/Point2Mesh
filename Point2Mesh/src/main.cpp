@@ -20,7 +20,7 @@ int main(int argc, const char * argv[]) {
     //testing::seed_tri_test_simple();
 //    testing::search_neighbor_test();
 //    testing::seed_tri_test();
-//    testing::seed_tri_test();
+//    testing::seed_tri_test(); 
 //    testing::mesher_test();
     //demo_read();
     string name = "tex.xyz";
