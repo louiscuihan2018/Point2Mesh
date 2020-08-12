@@ -64,7 +64,7 @@ void Edge::update_edge() {
     Vector3D fnorm = cross(this->b->point - this->a->point, opp->point - this->a->point);
     fnorm.normalize();
 
-    Vector3D vnorm = this->a->point + this->b->point + opp->point;
+    Vector3D vnorm = this->a->normal + this->b->normal + opp->normal;
     vnorm.normalize();
 
     if (dot(fnorm, vnorm) < 0) {

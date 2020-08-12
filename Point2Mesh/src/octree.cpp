@@ -47,7 +47,6 @@ namespace CGL {
             uint zloc = (uint) binsize * (p.z - q.z) / size.z;
 
             while (node->depth > 0) {
-                
                 uint branch_bit = 1 << l;
 
                 //cout << branch_bit << endl;
