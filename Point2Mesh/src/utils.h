@@ -37,4 +37,6 @@ Vertex* FindCandidate(Edge* e, OcTree* tree, double r);
 
 bool construct_ball(Vertex* v1, Vertex* v2, Vertex* v3, double p, Sphere& s);
 
+void triangle_normal(Vector3D& v1, Vector3D& v2, Vector3D& v3, Vector3D& normal);
+
 #endif /* utils_hj_h */
