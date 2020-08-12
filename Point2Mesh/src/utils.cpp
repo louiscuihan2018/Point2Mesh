@@ -230,29 +230,78 @@ Triangle* FindSeedTriangle(vector<Vertex*> vlist, double r) {
 
 }
 
+//bool construct_ball(Vertex* v1, Vertex* v2, Vertex* v3, double p, Sphere& s) {
+//    Vector3D& a = v1->point;
+//    Vector3D& b = v2->point;
+//    Vector3D& c = v3->point;
+//    Vector3D ac = c - a;
+//    Vector3D ab = b - a;
+//    Vector3D abXac = cross(ab, ac);
+//    Vector3D acXab = cross(ac, ab);
+//    Vector3D curr = ac.norm2() * (cross(abXac, ab)) + ab.norm2() * (cross(acXab, ac));
+//    curr = curr / (2.0 * abXac.norm2());
+//    Vector3D circumcenter = a + curr;
+//
+//    double dist = curr.norm();
+//
+//    if (p < dist) return false;
+//
+//    double adjustment = sqrt(p * p - dist * dist);
+//    abXac.normalize();
+//    Vector3D facenormal = abXac;
+//    Vector3D center = circumcenter - abXac * adjustment;
+//
+//    s = Sphere(center, p);
+//    return true;
+//}
+
 bool construct_ball(Vertex* v1, Vertex* v2, Vertex* v3, double p, Sphere& s) {
+    double r_2 = p * p;
     Vector3D& a = v1->point;
     Vector3D& b = v2->point;
     Vector3D& c = v3->point;
-    Vector3D ac = c - a;
-    Vector3D ab = b - a;
-    Vector3D abXac = cross(ab, ac);
-    Vector3D acXab = cross(ac, ab);
-    Vector3D curr = ac.norm2() * (cross(abXac, ab)) + ab.norm2() * (cross(acXab, ac));
-    curr = curr / (2.0 * abXac.norm2());
-    Vector3D circumcenter = a + curr;
 
-    double dist = curr.norm();
+    double ab = (a - b).norm2();
+    double bc = (b - c).norm2();
+    double ca = (c - a).norm2();
 
-    if (p < dist) return false;
+    double alpha = ab * (bc + ca - ab);
+    double beta = bc * (ab + ca - bc);
+    double gamma = ca * (ab + bc - ca);
+    double temp = alpha + beta + gamma;
 
-    double adjustment = sqrt(p * p - dist * dist);
-    abXac.normalize();
-    Vector3D facenormal = abXac;
-    Vector3D center = circumcenter - abXac * adjustment;
+    if (temp < 1e-10) return false;
 
+    double x = alpha * a.x + beta * b.x + gamma * c.x;
+    double y = alpha * a.y + beta * b.y + gamma * c.y;
+    double z = alpha * a.z + beta * b.z + gamma * c.z;
+    Vector3D circum_center(x, y, z);
+
+    double circumr_2 = ab * bc * ca;
+
+    ab = sqrt(ab); bc = sqrt(bc); ca = sqrt(ca);
+
+    circumr_2 /= ((ab + bc + ca) * (bc + ca - ab) * (ca + ab - bc) * (ab + bc - ca));
+
+    if (r_2 - circumr_2 < 0) return false;
+
+    Vector3D normal;
+    triangle_normal(a, b, c, normal);
+
+    Vector3D center = circum_center + sqrt(r_2 - circumr_2) * normal;
     s = Sphere(center, p);
     return true;
+}
+
+static void triangle_normal(Vector3D& v1, Vector3D& v2, Vector3D& v3, Vector3D& normal) {
+    normal = cross(v2 - v1, v3 - v1);
+    normal.normalize();
+    Vector3D avg = v1 + v2 + v3;
+    avg.normalize();
+
+    if (dot(avg, normal) < 0) {
+        normal = -normal;
+    }
 }
 
 Vertex* FindCandidate(Edge* e, OcTree* tree, double r) {
