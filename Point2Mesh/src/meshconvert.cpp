@@ -317,18 +317,23 @@ namespace CGL {
     }
 
     void MeshConvert::construct() {
-        if (m_front_edges.empty()) {
-            bool found = findSeedTriangle();
-            if (!found) {
-                std::cout<< "no seed";
-            }
-            expandTriangulation();
-        }
-        else {
-            expandTriangulation();
-        }
-        while (findSeedTriangle()) {
-            expandTriangulation();
+        //if (m_front_edges.empty()) {
+        //    bool found = findSeedTriangle();
+        //    if (!found) {
+        //        std::cout<< "no seed";
+        //    }
+        //    expandTriangulation();
+        //}
+        //else {
+        //    expandTriangulation();
+        //}
+        //while (findSeedTriangle()) {
+        //    expandTriangulation();
+        //}
+
+        while (m_front_edges.empty()) {
+            if (!findSeedTriangle()) break;
+            else expandTriangulation();
         }
 //        postProcess();
         
