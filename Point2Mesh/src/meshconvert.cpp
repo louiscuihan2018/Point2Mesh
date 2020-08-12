@@ -161,7 +161,8 @@ namespace CGL {
         
         Vector3D m = (v_source->point + v_target->point) / 2.0;
         
-        double m_c = sqrt(m_radius * m_radius - (m - v_source->point).norm2());
+        double r_2 = m_radius * m_radius;
+        double m_c = sqrt(r_2 - (m - v_source->point).norm2());
         double r_n = m_radius + m_c;
         
         Neighbor_map nrn;
@@ -175,7 +176,7 @@ namespace CGL {
         Vector3D c = s1.center;
         
         Vector3D edg = v_target->point - v_source->point;
-        Vector3D mc = m - c;
+        Vector3D mc = c - m;
         
         for (auto x = nrn.begin(); x != nrn.end(); x ++) {
             Vertex* v = x->second;
@@ -195,6 +196,8 @@ namespace CGL {
             mc_n.normalize();
             
             double cosine = dot(mc, mc_n);
+            cosine = max(-1.0, min(1.0, cosine));
+
             double theta = acos(cosine);
             Vector3D cro = cross(mc, mc_n);
             edg.normalize();
@@ -206,16 +209,16 @@ namespace CGL {
             if (theta > min_theta) {
                 continue;
             }
+
             bool clear = true;
-            for (auto x : nrn) {
-                Vertex* curr = x.second;
+            for (Neighbor_iter it = nrn.begin(); it != nrn.end() && clear != false; it++) {
+                Vertex* curr = (*it).second;
                 if ((curr == v_source) || (curr == v_target) || (curr == v)) {
                     continue;
                 }
-                Vector3D diff = curr->point - c_n;
-                double dist = diff.norm();
-                
-                if (dist < m_radius) {
+                double dist2 = (curr->point - c_n).norm2();
+
+                if (dist2 < r_2) {
                     clear = false;
                 }
             }
@@ -224,7 +227,6 @@ namespace CGL {
                 candidate = v;
                 min_theta = theta;
             }
-            
         }
         
         return candidate;
