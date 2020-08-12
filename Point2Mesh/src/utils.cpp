@@ -293,7 +293,7 @@ bool construct_ball(Vertex* v1, Vertex* v2, Vertex* v3, double p, Sphere& s) {
     return true;
 }
 
-static void triangle_normal(Vector3D& v1, Vector3D& v2, Vector3D& v3, Vector3D& normal) {
+void triangle_normal(Vector3D& v1, Vector3D& v2, Vector3D& v3, Vector3D& normal) {
     normal = cross(v2 - v1, v3 - v1);
     normal.normalize();
     Vector3D avg = v1 + v2 + v3;
