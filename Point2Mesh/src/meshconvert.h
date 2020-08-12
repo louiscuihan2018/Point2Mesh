@@ -26,8 +26,11 @@ namespace CGL {
         void expandTriangulation();
         void postProcess();
         void construct();
+        void write_to_file();
 
         double m_radius;
+        int count_i;
+        int count_j;
         uint m_vtx_count;
         uint m_tri_count;
         string m_filename;

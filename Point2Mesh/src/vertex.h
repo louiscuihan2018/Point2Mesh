@@ -26,6 +26,7 @@ class Vertex{
         v_type type;
         Edge_list adjacent_edges;
         Tri_list adjacent_triangles;
+        int index;
         Vertex(){};
         Vertex(Vector3D a, Vector3D b);
         void add_edge(Edge *edge);

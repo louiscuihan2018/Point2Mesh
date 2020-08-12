@@ -1,5 +1,7 @@
 #include "meshconvert.h"
 #include "utils.h"
+#include <iostream>
+#include <fstream>
 
 
 using namespace std;
@@ -9,6 +11,8 @@ namespace CGL {
     MeshConvert::MeshConvert(string file, double radius) {
         m_filename = file;
         m_radius = radius;
+        count_i = 0;
+        count_j = 0;
 
         init_data();
         init_ocsearch();
@@ -111,6 +115,7 @@ namespace CGL {
 
                 // * create the triangle and add it to this class member
                 Triangle* tri = new Triangle(v, u, cand);
+                count_i += 1;
                 m_triangles.push_back(tri);
 
                 e1 = v->edgeTo(*cand);
@@ -264,6 +269,7 @@ namespace CGL {
             }
             
             Triangle* t = new Triangle(e->from(), e->to(), v);
+            count_j +=1;
             m_triangles.push_front(t);
             e_s = v->edgeTo(*vs);
             e_t = v->edgeTo(*vt);
@@ -318,7 +324,56 @@ namespace CGL {
         while (findSeedTriangle()) {
             expandTriangulation();
         }
-        postProcess();
+//        postProcess();
+        
+    }
+
+    void MeshConvert::write_to_file() {
+        string out_p = "point.txt";
+        string out_n = "normal.txt";
+        string out_t = "triangle.txt";
+        ofstream out_1;
+        out_1.open(out_p);
+        if (!out_1) {
+            std::cout<<"error p";
+            std::cout<< "\n";
+        }
+        for (Vertex* v : m_vertices) {
+            out_1 << v->point.x<< " ";
+            out_1 << v->point.y<< " ";
+            out_1 << v->point.z;
+            out_1 << "\n";
+        }
+        out_1.close();
+        
+        ofstream out_2;
+        out_2.open(out_n);
+        if (!out_1) {
+            std::cout<<"error n";
+            std::cout<< "\n";
+        }
+        for (Vertex* v : m_vertices) {
+            out_2 << v->normal.x<< " ";
+            out_2 << v->normal.y<< " ";
+            out_2 << v->normal.z;
+            out_2 << "\n";
+        }
+        out_2.close();
+        
+        ofstream out_3;
+        out_3.open(out_t);
+        if (!out_3) {
+            std::cout<<"error t";
+            std::cout<< "\n";
+        }
+        for (Triangle* t : m_triangles) {
+            out_3 << t->a->index<< " ";
+            out_3 << t->b->index<< " ";
+            out_3 << t->c->index;
+            out_3 << "\n";
+        }
+        out_3.close();
+        
         
     }
     
