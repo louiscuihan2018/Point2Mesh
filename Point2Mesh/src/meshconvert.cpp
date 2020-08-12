@@ -257,7 +257,7 @@ namespace CGL {
             
             Vertex* vs =  e->from();
             Vertex* vt = e->to();
-            Triangle* t = new Triangle(e->from(), e->to(), v);
+            Triangle* t = new Triangle(vs, vt, v);
             /*Edge* e_s = v->edgeTo(*vs);
             Edge* e_t = v->edgeTo(*vt);
             
@@ -295,25 +295,70 @@ namespace CGL {
     }
 
     void MeshConvert::postProcess() {
-        for (Edge* x : m_border_edges) {
-            
-            if (x->type != BORDER) {
-                m_border_edges.remove(x);
+        list<Edge*>::iterator it = m_border_edges.begin();
+        while (it != m_border_edges.end()) {
+            Edge* e = *it;
+            if (e->type != e_type::BORDER) {
+                it = m_border_edges.erase(it);
                 continue;
             }
-            
-            Vertex* vs = x->from();
-            Vertex* vt = x->to();
-            
-            Vertex* target = vs->post_Helper(vt);
-            
-            if (target != NULL) {
-                m_border_edges.remove(x);
-                Triangle* t = new Triangle(vs, vt, target);
-                m_triangles.push_back(t);
+            Vertex* vs = e->from(); 
+            Vertex* vt = e->to();
+
+            Vertex* v = NULL;
+
+            Edge* e0 = vs->edgeTo(*vt);
+            Triangle* tri = e0->face1;
+
+            vector<Edge*>::iterator ei = vs->adjacent_edges.begin();
+            while (ei != vs->adjacent_edges.end())
+            {
+                if ((*ei)->type != e_type::BORDER)
+                {
+                    ++ei;
+                    continue;
+                }
+                Vertex* u = (*ei)->from();
+
+                if (u == vs)
+                {
+                    ++ei;
+                    continue;
+                }
+
+                if (u == tri->a || u == tri->b || u == tri->c)
+                {
+                    ++ei;
+                    continue;
+                }
+
+                Edge* e1 = u->edgeTo(*vt);
+                if (e1 == NULL)
+                {
+                    ++ei;
+                    continue;
+                }
+
+                if (e1->type != e_type::BORDER || e1->from() != vt)
+                {
+                    ++ei;
+                    continue;
+                }
+                v = u;
+                break;
             }
-            
+
+            if (v == NULL) {
+                it++;
+                continue;
+            }
+
+            Triangle* t = new Triangle(vs, vt, v);
+            m_triangles.push_back(t);
+
+            it = m_border_edges.erase(it);
         }
+
     }
 
     void MeshConvert::construct() {
@@ -335,7 +380,7 @@ namespace CGL {
             if (!findSeedTriangle()) break;
             else expandTriangulation();
         }
-//        postProcess();
+        postProcess();
         
     }
 
