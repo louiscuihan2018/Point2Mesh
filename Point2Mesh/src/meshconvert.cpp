@@ -161,7 +161,8 @@ namespace CGL {
         
         Vector3D m = (v_source->point + v_target->point) / 2.0;
         
-        double r_n = m_radius + (m - v_source->point).norm();
+        double m_c = sqrt(m_radius * m_radius - (m - v_source->point).norm2());
+        double r_n = m_radius + m_c;
         
         Neighbor_map nrn;
         m_ocsearch->set_radius(r_n);
@@ -254,7 +255,8 @@ namespace CGL {
             
             Vertex* vs =  e->from();
             Vertex* vt = e->to();
-            Edge* e_s = v->edgeTo(*vs);
+            Triangle* t = new Triangle(e->from(), e->to(), v);
+            /*Edge* e_s = v->edgeTo(*vs);
             Edge* e_t = v->edgeTo(*vt);
             
             if (e_s != NULL && e_s->type != E_FRONT) {
@@ -266,25 +268,27 @@ namespace CGL {
                 e->type = BORDER;
                 m_border_edges.push_front(e);
                 continue;
-            }
+            }*/
             
-            Triangle* t = new Triangle(e->from(), e->to(), v);
             count_j +=1;
             m_triangles.push_front(t);
-            e_s = v->edgeTo(*vs);
-            e_t = v->edgeTo(*vt);
+            Edge* e_s = v->edgeTo(*vs);
+            Edge* e_t = v->edgeTo(*vt);
+
+            if (e_s->type == e_type::E_FRONT) m_front_edges.push_front(e_s);
+            if (e_t->type == e_type::E_FRONT) m_front_edges.push_front(e_t);
             
-            if (e_s->face1 != NULL && e_s->face2 != NULL) {
-                e_s->type = E_INNER;
-            } else {
-                m_front_edges.push_front(e_s);
-            }
-            
-            if (e_t->face1 != NULL && e_t->face2 != NULL) {
-                e_t->type = E_INNER;
-            } else {
-                m_front_edges.push_front(e_t);
-            }
+            //if (e_s->face1 != NULL && e_s->face2 != NULL) {
+            //    e_s->type = E_INNER;
+            //} else {
+            //    m_front_edges.push_front(e_s);
+            //}
+            //
+            //if (e_t->face1 != NULL && e_t->face2 != NULL) {
+            //    e_t->type = E_INNER;
+            //} else {
+            //    m_front_edges.push_front(e_t);
+            //}
         }
     }
 
