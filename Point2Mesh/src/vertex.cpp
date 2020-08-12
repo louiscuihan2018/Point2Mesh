@@ -19,6 +19,7 @@ using namespace CGL;
 Vertex::Vertex(Vector3D a, Vector3D b) {
     this->point = a;
     this->normal = b;
+    this->index = -1;
     this->type = v_type::ORPHAN;
     this->adjacent_edges.clear();
     this->adjacent_triangles.clear();

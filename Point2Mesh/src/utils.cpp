@@ -16,6 +16,7 @@
 #include "sphere.h"
 #include "triangle.h"
 #include "ocsearch.h"
+#include "meshconvert.h"
 using namespace CGL;
 
 pair<Triangle*, bool> check_and_initialize_tri(Vertex* a, Vertex* b, Vertex* c) {
@@ -94,6 +95,7 @@ uint read_and_range(string name, pair< vector<Vector3D>&, vector<Vertex*>& >* da
         Vector3D curr_point = Vector3D(x, y, z);
         Vector3D curr_normal = Vector3D(dx, dy, dz);
         Vertex* c = new Vertex(curr_point, curr_normal);
+        c->index = i;
         vertices_t.push_back(c);
     }
 
@@ -106,6 +108,7 @@ uint read_and_range(string name, pair< vector<Vector3D>&, vector<Vertex*>& >* da
 
     return v_number;
 }
+
 
 Triangle* FindSeedTriangle(OcTree* tree, double r) {
     Triangle* result = NULL;

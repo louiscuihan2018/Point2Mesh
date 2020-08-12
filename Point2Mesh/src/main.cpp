@@ -10,7 +10,7 @@
 #include "edge.h"
 #include "sphere.h"
 #include "triangle.h"
-//#include "utils.h"
+#include "utils.h"
 
 #include "testing.h"
 
@@ -21,11 +21,16 @@ int main(int argc, const char * argv[]) {
 //    testing::search_neighbor_test();
 //    testing::seed_tri_test();
 //    testing::seed_tri_test();
-//    testing::mesher_test();
+//    testing::mesher_test();n
     //demo_read();
     
-    string name = "zig.xyz";
-    double radius = 1.0;
+    string name = "bun_zipper.xyz";
+    double radius = 0.002;
     MeshConvert m = MeshConvert(name, radius);
     m.construct();
+    std::cout<< m.count_i;
+    std::cout<< "\n";
+    std::cout<< m.count_j;
+    std::cout<< "\n";
+    m.write_to_file();
 }
