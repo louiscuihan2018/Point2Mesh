@@ -34,7 +34,7 @@ Triangle::Triangle(Vertex* v1, Vertex* v2, Vertex* v3) {
     Edge* ca = v3->edgeTo(*v1);
     if (ca == NULL) 
         ca = new Edge(v3, v1);
-    this->ca = ca;
+
     this->ab->add_triangle(this);
     this->bc->add_triangle(this);
     this->ca->add_triangle(this);

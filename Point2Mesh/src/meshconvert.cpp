@@ -174,9 +174,9 @@ namespace CGL {
         for (auto x = nrn.begin(); x != nrn.end(); x ++) {
             Vertex* v = x->second;
             
-            if ((v == t1->a) || (v == t1->b) || (v == t1->c)) {
-                continue;
-            }
+            if ((v == t1->a) || (v == t1->b) || (v == t1->c)) continue;
+
+            if ((v->type == v_type::INNER) || (!v->compatible(*e))) continue;
             
             Sphere s2;
             if (!construct_ball(v_source, v_target, v, m_radius, s2)) {
@@ -230,22 +230,22 @@ namespace CGL {
             Edge* e = m_front_edges.front();
             m_front_edges.pop_front();
 
-            if (e->type == BORDER|| e->type == E_INNER) {
+            if (e->type != e_type::E_FRONT) {
                 continue;
             }
             
             Vertex* v = FindCandidate(e);
             
             if (v == NULL) {
-                e->type = BORDER;
+                e->type = e_type::BORDER;
                 m_border_edges.push_front(e);
                 continue;
             }
-            if ((v->type == INNER) || (!v->compatible(*e))) {
-                e->type = BORDER;
+            /*if ((v->type == v_type::INNER) || (!v->compatible(*e))) {
+                e->type = e_type::BORDER;
                 m_border_edges.push_front(e);
                 continue;
-            }
+            }*/
             
             Vertex* vs =  e->from();
             Vertex* vt = e->to();
