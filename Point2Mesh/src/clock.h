@@ -24,7 +24,7 @@ namespace CGL {
 
         double stop(bool output = true);
 
-        list<Tp>::iterator get_all_stops();
+        list<double> get_all_stops();
 
         void output_all_stops();
     };

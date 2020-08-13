@@ -4,6 +4,7 @@
 #include "types.h"
 #include "utils.h"
 #include "ocsearch.h"
+//#include "clock.h"
 #include <string>
 #include <vector>
 
@@ -28,6 +29,7 @@ namespace CGL {
         void construct();
         void write_to_file();
         void sharp();
+        void data_output(string name, list<double> timing);
 
         double m_radius;
         int count_i;

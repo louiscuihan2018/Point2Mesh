@@ -22,8 +22,25 @@ namespace CGL {
         return duration;
     }
 
-    list<Tp>::iterator Timer::get_all_stops() {
-        return t_times.begin();
+    list<double> Timer::get_all_stops() {
+        list<double> res;
+        Tp last;
+        auto it = t_times.begin();
+        
+        if (it != t_times.end()) {
+            last = *it;
+            it++;
+        }
+        
+        int c = 0;
+        for (; it != t_times.end(); it++, c++) {
+            double duration = chrono::duration_cast<chrono::nanoseconds>(*it - last).count() / 1000000;
+            res.push_back(duration);
+            last = *it;
+        }
+        
+        return res;
+        
     }
 
     void Timer::output_all_stops() {

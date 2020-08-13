@@ -24,14 +24,22 @@ int main(int argc, const char * argv[]) {
 //    testing::mesher_test();n
     //demo_read();
     
-    string name = "Armadillo.xyz";
-    double radius = 3;
+    string name = "bun_zipper.xyz";
+    double radius = 0.0014;
+    Timer t;
+    t.reset();
     MeshConvert m = MeshConvert(name, radius);
+    t.stop();
     m.construct();
 //    m.sharp();
+    t.stop();
+    m.postProcess();
+    t.stop();
     std::cout<< m.count_i;
     std::cout<< "\n";
     std::cout<< m.count_j;
     std::cout<< "\n";
     m.write_to_file();
+    list<double> timing = t.get_all_stops();
+    m.data_output(name, timing);
 }
