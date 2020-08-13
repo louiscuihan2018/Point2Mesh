@@ -24,10 +24,11 @@ int main(int argc, const char * argv[]) {
 //    testing::mesher_test();n
     //demo_read();
     
-    string name = "bun_zipper.xyz";
-    double radius = 0.002;
+    string name = "Armadillo.xyz";
+    double radius = 3;
     MeshConvert m = MeshConvert(name, radius);
     m.construct();
+//    m.sharp();
     std::cout<< m.count_i;
     std::cout<< "\n";
     std::cout<< m.count_j;

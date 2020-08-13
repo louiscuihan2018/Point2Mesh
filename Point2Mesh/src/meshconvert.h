@@ -27,6 +27,7 @@ namespace CGL {
         void postProcess();
         void construct();
         void write_to_file();
+        void sharp();
 
         double m_radius;
         int count_i;
