@@ -1,0 +1,236 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS 184: Final Project</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito">
+    </head>
+<body>
+    <nav class="navbar navbar-splash navbar-expand-md" style="background-color: rgb(45, 61, 138);">
+        <div class="container">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <!-- Left Side Of Navbar -->
+                <ul class="navbar-nav mr-auto">
+                    <li>
+                        <p class="course-title">CS 184: Computer Graphics</p>
+                    </li>
+                </ul>
+                <!-- Right Side Of Navbar -->
+                <ul class="navbar-nav ml-auto">
+                    <!-- Authentication Links -->
+                    <li class="nav-item">
+                        <a id="about" class="item-text" href="javascript:void(0)" "="">Final Project</a>
+                    </li>
+                </ul>
+            </div> 
+        </div>
+    </nav>
+    <div class="course-container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>
+                    <strong>Final Project Milestone Report</strong>
+                    : Point-cloud to Mesh</h1>
+                <h3>Name: &nbsp; Star Li | SID: 3033789672 &nbsp; Han Cui | SID: 3033631995</h3>
+            </div>
+        </div>
+        <hr>
+        <div>
+            <h2>Abstract</h2>
+
+            <p>
+            </p>
+
+            <br>
+            <div class="row">
+<!--                 <div class="col-md-6 offset-md-3">
+                    <img src = "images/Diagram.png" width="800px" style="margin-left:-150px" >
+                        <figcaption align="middle">Project pipelines, ✔ means finished</figcaption> 
+                </div> -->
+            </div>
+            <br>
+            <hr>
+            <h2>Technical approach</h2>
+            <h3>Octree & Ocsearch:</h3>
+
+            <p>
+            </p>
+
+
+            <h3>Geometry data structure: </h4>
+            <p>
+                Since our implementation of “Point to Mesh” reconstruction requires huge amount of interactions and calculations with 3D geometries in different forms, we implemented several geometry class in C++ from scratch. Our data structures include Vertex, Edge, Sphere, and Triangle. 
+            </p>
+
+            <h4>Vertex:</h4>
+            <p>
+                The Vertex class contains two Vector3D parameters of point and normal, which stores its 3D location and vertex normal read from the .xyz file. It also has an adjacent_edges and an adjacent_triangles list to store all the edges and triangles around the Vertex. Thus, the Vertex class has an add_edge and add_triangle method to update these two lists in the construction of the Edge and Triangle class. The Vertex class also contains a type parameter to flag whether the Vertex is connected to the Edges and Triangles and whether the Vertex is included in the reconstructed mesh with a corresponding update_type method. Another important method of Vertex class is compatible check with both an Edge and two other Vertices; the method examines whether the area-weighted face normal of the Triangle composited of corresponding elements is in the same direction of each Vertex’s normal.
+            </p>
+
+            <h4>Edge:</h4>
+            <p>
+                The Edge class contains two Vertex elements, representing two endpoints of the edge. In the Edge construction, these Vertex elements would update their adjacent_edges list, and the Edge class contains the get_Vertex method for both Vertex elements. The Edge class also contains two Triangle elements to represent the adjacent two Triangles, which is updated through the add_triangle method. Similar to the Vertex class, the Edge class also contains the type parameter to flag whether the Edge is inside the reconstructed mesh, or on the boundary of the mesh, which is updated in the add_triangle method. One specific method for the Edge class called update_edge is to maintain the identical orientation of edges by comparing the face normal of adjacent Triangle and vertex normal of the vertex besides Edge’s endpoints.
+            </p>
+
+             <h4>Sphere:</h4>
+            <p>
+                The Sphere class is mainly used in the empty ball configuration, which contains a Vector3D parameter sphere center, and a double parameter radius.
+            </p>
+
+
+            <hr>
+
+            <h2>Schedule</h2>
+            <ul>
+                <li>
+                   <h4>Week 1 (8.1 - 8.7):</h4> 
+                   <ul>
+                       <li>
+                           <p>Set up the project folder with capability to work with point cloud files. <b style="color: green;">(Finished)</b></p>
+                       </li>
+                       <li><p>
+                            Implement a functional BPA algorithm. <b style="color: red;">(2/3 Finished)</b>
+                       </p></li>
+                       <li><p>
+                            Finish Milestone Report. <b style="color: green;">(Finished)</b>
+                       </p></li>
+                   </ul>
+                </li>
+
+                <li>
+                    <h4>Week 2 (8.8 - 8.14):</h4> 
+                    <ul>
+                        <li>
+                            <p>Integrate the BPA algorithm into a complete pipeline that converts point-cloud input to mesh outputs.
+                                <b style="color: blue;">(Started)</b>
+                            </p>
+                        </li>
+                        <li><p>
+                            Evaluate the algorithm’s performance by comparing with the original meshes. <b style="color: blue;">(Started)</b>
+                        </p></li>
+                        <li><p>
+                            Try to implement the Poisson model (if we have time).
+                        </p></li>
+                        <li><p>
+                            Present final report and presentation.
+                        </p></li>
+                    </ul>
+                 </li>
+            </ul>
+            <hr>
+            <h2>Additional Resources</h2>
+            <p>In addition to those listed in the proposal, we find the following resources useful as well this week</p>
+            <ul>
+                <li><p>An Analysis and Implementation of a Parallel Ball Pivoting
+                    Algorithm <a href="http://www.ipol.im/pub/art/2014/81/article.pdf">http://www.ipol.im/pub/art/2014/81/article.pdf</a></p></li>
+            </ul>
+            <br>
+            <hr>
+            <p class="text-center text-md-left">Made with ❤ with Bootstrap,
+                by Star Li (listar2000@berkeley.edu)
+            </p>
+        </div>
+    </div>
+
+
+<style>
+    body {
+        font-family: 'Nunito', sans-serif;
+    }
+
+    .container {
+        max-width: 100%;
+    }
+
+    .navbar-splash {
+        background-color: #30404D;
+        position: relative;
+        margin-bottom: 20px;
+        padding: 10px 0;
+        width: 100%;
+        transition: 100ms;
+        z-index: 5;
+    }
+
+    .nav-item {
+        display: inline-block;
+        padding: 8px 18px;
+        background-color: transparent;
+    }
+
+    .nav-item:hover {
+        opacity: 0.8;
+    }
+
+    .item-text {
+        color: white;
+        margin: 0 3px;
+    }
+
+    .item-text:hover {
+        text-decoration: none;
+        color: white;
+    }
+
+    .course-title {
+        color: white;
+        font-size: larger;
+        margin: 0 3px;
+        padding-left: 10px;
+    }
+
+    .course-container {
+        width: 70%;
+        margin: 0 auto;
+        position: relative;
+        text-align: justify;
+    }
+
+    .icon-image {
+        margin: -40px auto;
+        display: block;
+    }
+
+    .img-center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50%;
+    }
+
+    h1 {
+        font-size: 30px;
+        line-height: 140%;
+        font-weight: bold;
+    }
+
+    h2 {
+        font-size: 27px;
+        line-height: 140%;
+    }
+
+    h3 {
+        font-size: 20px;
+        line-height: 140%;
+    }
+
+    h4 {
+        margin-top: 20px;
+        font-size: 19px;
+        font-weight: bold;
+        line-height: 140%;
+    }
+
+    p {
+        font-size: 18px;
+    }
+
+    code {
+        font-size: 18px;
+    }
+</style>
+</body></html>
