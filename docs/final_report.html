@@ -47,10 +47,10 @@
 
             <br>
             <div class="row">
-<!--                 <div class="col-md-6 offset-md-3">
+                <div class="col-md-6 offset-md-3">
                     <img src = "images/Diagram.png" width="800px" style="margin-left:-150px" >
                         <figcaption align="middle">Project pipelines, ✔ means finished</figcaption> 
-                </div> -->
+                </div>
             </div>
             <br>
             <hr>
@@ -61,7 +61,7 @@
             </p>
 
 
-            <h3>Geometry data structure: </h4>
+            <h4>Geometry data structure: </h4>
             <p>
                 Since our implementation of “Point to Mesh” reconstruction requires huge amount of interactions and calculations with 3D geometries in different forms, we implemented several geometry class in C++ from scratch. Our data structures include Vertex, Edge, Sphere, and Triangle. 
             </p>
@@ -82,59 +82,71 @@
             </p>
 
 
-            <hr>
-
-            <h2>Schedule</h2>
-            <ul>
-                <li>
-                   <h4>Week 1 (8.1 - 8.7):</h4> 
-                   <ul>
-                       <li>
-                           <p>Set up the project folder with capability to work with point cloud files. <b style="color: green;">(Finished)</b></p>
-                       </li>
-                       <li><p>
-                            Implement a functional BPA algorithm. <b style="color: red;">(2/3 Finished)</b>
-                       </p></li>
-                       <li><p>
-                            Finish Milestone Report. <b style="color: green;">(Finished)</b>
-                       </p></li>
-                   </ul>
-                </li>
-
-                <li>
-                    <h4>Week 2 (8.8 - 8.14):</h4> 
-                    <ul>
-                        <li>
-                            <p>Integrate the BPA algorithm into a complete pipeline that converts point-cloud input to mesh outputs.
-                                <b style="color: blue;">(Started)</b>
-                            </p>
-                        </li>
-                        <li><p>
-                            Evaluate the algorithm’s performance by comparing with the original meshes. <b style="color: blue;">(Started)</b>
-                        </p></li>
-                        <li><p>
-                            Try to implement the Poisson model (if we have time).
-                        </p></li>
-                        <li><p>
-                            Present final report and presentation.
-                        </p></li>
-                    </ul>
-                 </li>
-            </ul>
-            <hr>
-            <h2>Additional Resources</h2>
-            <p>In addition to those listed in the proposal, we find the following resources useful as well this week</p>
-            <ul>
-                <li><p>An Analysis and Implementation of a Parallel Ball Pivoting
-                    Algorithm <a href="http://www.ipol.im/pub/art/2014/81/article.pdf">http://www.ipol.im/pub/art/2014/81/article.pdf</a></p></li>
-            </ul>
             <br>
             <hr>
-            <p class="text-center text-md-left">Made with ❤ with Bootstrap,
-                by Star Li (listar2000@berkeley.edu)
-            </p>
-        </div>
-    </div>
+
+
+            <h2>Results</h2>
+
+            <h3>Comparison of different BPA radius: </h3>
+
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <img src = "images/bunny_radius.png" width="800px" style="margin-left:-150px" >
+                        <figcaption align="middle">Bunny reconstruction with different BPA radius </figcaption> 
+                </div>
+            </div>
+
+            <p>We found is the trade-off between the degree of detail loss and missing parts, as you can see in the comparison of bunny .daes. As the radius increases, the holes and missing parts of the reconstruction decreases, while the degree of detail loss tends to increase. </p>
+
+            <h3>Comparison of origina .ply: </h3>
+
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <img src = "images/blender/bunny_front.png" width="800px" style="margin-left:-150px" >
+                        <figcaption align="middle">Comparison, front angle</figcaption> 
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <img src = "images/blender/bunny_back.png" width="800px" style="margin-left:-150px" >
+                        <figcaption align="middle">Comparison, back angle</figcaption> 
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <img src = "images/blender/bunny_top.png" width="800px" style="margin-left:-150px" >
+                        <figcaption align="middle">Comparison, top angle</figcaption> 
+                </div>
+            </div>
+
+            <p>As we can see here, even though the comparison shows some degrees of detail loss, the overall similarity between the reconstructed meshes and the original meshes is still pretty high. </p>
+
+            <h3>Examples of other reconstructions: </h3>
+
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/GIwfv9VCXsE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <p>The reconstruction of Armadillo .ply, 172974 vertices </p>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/fMPrFUZ_sTI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <p>The reconstruction of dragon .ply, 100250 vertices </p>
+
+
+
+
+            <h2>Contribution: </h2>
+
+            <p>All team members contribute to the project files, presentation, testing, debugging, and experiments. The BPA algorithm is implemented equally by both of Star and Han.</p>
+
+            <p>There’re some parts they contribute individually: </p>
+
+            <p>Star Li: Acceleration Structure, integration of BPA algorithm and other classes.</p>
+
+            <p>Han Cui: Geometry Structure, File Input and Output, unintegrated BPA draft.</p>
+
+            
+
+        
 
 
 <style>
